@@ -19,6 +19,11 @@
 
 * { box-sizing: border-box; }
 html, body { padding: 0; margin: 0; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
 body {
   background:
     radial-gradient(900px 520px at 20% 0%, rgba(183, 156, 91, 0.12), transparent 60%),
@@ -28,6 +33,12 @@ body {
   color: var(--fg);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.6;
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -270,14 +281,15 @@ html[data-theme='light'] .iconBtn { background: rgba(255,255,255,.7); }
   inset: 0;
   background: rgba(2, 6, 23, 0.52);
   backdrop-filter: blur(10px);
+  touch-action: none;
   z-index: 60;
 }
 .mobileSheet {
   position: fixed;
-  top: 14px;
-  bottom: 14px;
-  right: 14px;
-  left: 14px;
+  top: max(14px, env(safe-area-inset-top));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  right: max(14px, env(safe-area-inset-right));
+  left: max(14px, env(safe-area-inset-left));
   border-radius: 22px;
   border: 1px solid var(--border);
   background:
@@ -286,8 +298,10 @@ html[data-theme='light'] .iconBtn { background: rgba(255,255,255,.7); }
     color-mix(in srgb, var(--bg) 90%, transparent);
   box-shadow: 0 30px 80px rgba(2, 6, 23, 0.40);
   z-index: 70;
-  padding: 16px;
+  padding: 16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .mobileSheetTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; }
 .mobileBrand { font-weight: 900; letter-spacing: -0.02em; }
@@ -384,6 +398,10 @@ html[data-theme='dark'] .heroBg {
 
 /* ---------- WhatsApp (premium) ---------- */
 .whatsapp { position: fixed; right: 16px; bottom: 16px; z-index: 80; }
+.whatsapp {
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+}
 .whatsapp a {
   display: inline-flex;
   align-items: center;
@@ -410,6 +428,7 @@ html[data-theme='dark'] .heroBg {
   position: sticky;
   top: 0;
   z-index: 60;
+  padding-top: env(safe-area-inset-top);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
@@ -500,6 +519,7 @@ html[data-theme='dark'] .heroBg {
   padding: 12px 12px;
   outline: none;
   box-shadow: 0 16px 40px rgba(2, 6, 23, 0.08);
+  font-size: 16px;
 }
 .textarea { min-height: 120px; resize: vertical; }
 .input:focus, .textarea:focus { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
@@ -1083,6 +1103,7 @@ html[data-theme='light'] .leadCard {
   background: rgba(255, 255, 255, 0.16);
   color: var(--fg);
   outline: none;
+  font-size: 16px;
 }
 
 html[data-theme='light'] .leadInput {
@@ -1120,4 +1141,30 @@ html[data-theme='light'] .leadInput {
   height: 0;
   width: 0;
   opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .sliderTop,
+  .journalItemTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .journalItemMeta {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: min(1120px, calc(100% - 1.2rem));
+  }
+
+  .brandTitle {
+    display: none;
+  }
+
+  .mobileSocial {
+    flex-direction: column;
+  }
 }

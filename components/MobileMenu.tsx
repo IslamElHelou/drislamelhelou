@@ -39,6 +39,35 @@ export default function MobileMenu({
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  useEffect(() => {
+    if (!open) return
+
+    const scrollY = window.scrollY
+    const htmlStyle = document.documentElement.style
+    const bodyStyle = document.body.style
+
+    const prevHtmlOverflow = htmlStyle.overflow
+    const prevBodyOverflow = bodyStyle.overflow
+    const prevBodyPosition = bodyStyle.position
+    const prevBodyTop = bodyStyle.top
+    const prevBodyWidth = bodyStyle.width
+
+    htmlStyle.overflow = 'hidden'
+    bodyStyle.overflow = 'hidden'
+    bodyStyle.position = 'fixed'
+    bodyStyle.top = `-${scrollY}px`
+    bodyStyle.width = '100%'
+
+    return () => {
+      htmlStyle.overflow = prevHtmlOverflow
+      bodyStyle.overflow = prevBodyOverflow
+      bodyStyle.position = prevBodyPosition
+      bodyStyle.top = prevBodyTop
+      bodyStyle.width = prevBodyWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
+
   const links = useMemo(
     () => [
       { href: base, label: labels.home },
@@ -59,6 +88,7 @@ export default function MobileMenu({
       <button
         className="iconBtn iconBtnStrong"
         aria-label={open ? 'Close menu' : 'Open menu'}
+        aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {open ? (

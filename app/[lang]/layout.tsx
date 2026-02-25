@@ -1,7 +1,7 @@
 import '@/app/styles/globals.css'
 
 import { Suspense } from 'react'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Providers } from './providers'
 import { Header } from '@/components/Header'
@@ -12,6 +12,12 @@ import MetaPixel from '@/components/MetaPixel'
 import SiteAnalytics from '@/components/SiteAnalytics'
 import ConsentBanner from '@/components/ConsentBanner'
 import { clinic, getDirection, isLocale, type Locale } from '@/lib/i18n'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover'
+}
 
 export function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'ar' }]
