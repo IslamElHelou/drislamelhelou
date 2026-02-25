@@ -1,5 +1,6 @@
 import '@/app/styles/globals.css'
 
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from './providers'
@@ -123,8 +124,10 @@ export default async function RootLayout({
               </Script>
             </>
           ) : null}
-          <MetaPixel />
-          <SiteAnalytics />
+          <Suspense fallback={null}>
+            <MetaPixel />
+            <SiteAnalytics />
+          </Suspense>
           <ConsentBanner />
           <script
             type="application/ld+json"
