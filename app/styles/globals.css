@@ -1202,4 +1202,39 @@ html[data-theme='light'] .leadInput {
     width: 46px;
     height: 46px;
   }
+  /* ===== iPhone Navbar Tap Fix (place at END of globals.css) ===== */
+.nav { flex-wrap: nowrap; }
+
+.brand { flex: 1 1 auto; min-width: 0; }
+
+.brandText { min-width: 0; } /* CRITICAL: allow shrink */
+
+.brandName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 72vw;
+}
+
+/* Keep mobile buttons always clickable above brand */
+.mobileNav,
+.iconBtnStrong,
+.iconBtn {
+  position: relative;
+  z-index: 120;
+}
+
+/* iOS tap improvement */
+.iconBtn,
+.iconBtnStrong,
+.mobileNav button,
+.mobileLink,
+.navlinks a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Prevent any hidden desktop nav from blocking touches */
+@media (max-width: 979px) {
+  .navlinks { display: none !important; pointer-events: none !important; }
 }
