@@ -30,8 +30,8 @@ export function Header({ locale }: { locale: Locale }) {
             <Image
               src="/brand/logo.png"
               alt={clinic.brandName}
-              width={38}
-              height={38}
+              width={44}
+              height={44}
               priority
               className="brandLogo"
             />
