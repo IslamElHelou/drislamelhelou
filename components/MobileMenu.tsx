@@ -86,6 +86,7 @@ export default function MobileMenu({
   return (
     <div className="mobileNav">
       <button
+        type="button"
         className="iconBtn iconBtnStrong"
         aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
