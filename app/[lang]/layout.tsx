@@ -3,6 +3,7 @@ import '@/app/styles/globals.css'
 import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Providers } from './providers'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -146,6 +147,7 @@ export default async function RootLayout({
           </main>
           <Footer locale={lang} />
           <WhatsAppButton label={lang === 'ar' ? 'واتساب' : 'WhatsApp'} />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
