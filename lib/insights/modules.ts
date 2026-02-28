@@ -758,6 +758,191 @@ const whenToConsult: InsightModule = {
   }
 }
 
+const skinAging: InsightModule = {
+  slug: 'skin-aging',
+  title: { en: 'Skin Aging Assessment', ar: 'تقييم شيخوخة الجلد' },
+  description: {
+    en: 'Understand visible aging signs and structured approaches to prevention and treatment.',
+    ar: 'فهم علامات الشيخوخة الظاهرة والطرق المنظمة للوقاية والعلاج.'
+  },
+  questions: [
+    {
+      id: 'concern',
+      title: { en: 'Which aging sign concerns you most?', ar: 'أي علامة شيخوخة تقلقك أكثر؟' },
+      options: [
+        { id: 'lines', label: { en: 'Fine lines / wrinkles', ar: 'خطوط دقيقة / تجاعيد' }, score: 2 },
+        { id: 'volume', label: { en: 'Loss of volume / sagging', ar: 'فقدان الحجم / ترهل' }, score: 3 },
+        { id: 'texture', label: { en: 'Texture / pores / roughness', ar: 'النسيج / المسام / خشونة' }, score: 2 },
+        { id: 'spots', label: { en: 'Age spots / pigmentation', ar: 'بقع عمرية / تصبغات' }, score: 2 }
+      ]
+    },
+    {
+      id: 'sun',
+      title: { en: 'Sun protection history?', ar: 'ما تاريخ حماية الشمس؟' },
+      options: [
+        { id: 'consistent', label: { en: 'Consistent use for years', ar: 'استخدام منتظم لسنوات' }, score: 1 },
+        { id: 'recent', label: { en: 'Recent, not long-term', ar: 'مؤخرًا، ليس طويل المدى' }, score: 2 },
+        { id: 'minimal', label: { en: 'Minimal or no regular protection', ar: 'حماية بسيطة أو خاطئة' }, score: 4 }
+      ]
+    },
+    {
+      id: 'skincare',
+      title: { en: 'How long have you used anti-aging actives?', ar: 'كم مدة استخدام علاجات مضادة للشيخوخة؟' },
+      helper: {
+        en: 'Examples: retinoids, vitamin C, peptides.',
+        ar: 'مثل: ريتينويدات، فيتامين C، ببتيدات.'
+      },
+      options: [
+        { id: 'years', label: { en: '1+ year consistent use', ar: 'سنة فأكثر بانتظام' }, score: 1 },
+        { id: 'months', label: { en: '3–12 months or inconsistent', ar: 'من 3 إلى 12 شهر أو غير منتظم' }, score: 2 },
+        { id: 'minimal', label: { en: 'Little or no structured use', ar: 'استخدام محدود أو بدون نظام' }, score: 3 }
+      ]
+    },
+    {
+      id: 'interest',
+      title: { en: 'Interest in professional treatments?', ar: 'هل تهتم بالعلاجات الاحترافية؟' },
+      options: [
+        { id: 'no', label: { en: 'No, prefer home care only', ar: 'لا، أفضل الرعاية المنزلية فقط' }, score: 0 },
+        { id: 'curious', label: { en: 'Curious, want to know more', ar: 'فضولي، أريد معرفة المزيد' }, score: 2 },
+        { id: 'yes', label: { en: 'Yes, considering procedures', ar: 'نعم، أفكر في الإجراءات' }, score: 3 }
+      ]
+    }
+  ],
+  evaluate: (answers) => {
+    const { score, redFlagsByLocale } = computeScore(skinAging, answers)
+    const level = score >= 10 ? 'priority' : score >= 6 ? 'evaluation' : 'informational'
+
+    const summary = {
+      en:
+        level === 'priority'
+          ? 'Your answers suggest active aging concerns that benefit from a structured plan.'
+          : level === 'evaluation'
+            ? 'Your answers suggest preventive and corrective strategies may help.'
+            : 'Your answers suggest early or mild aging signs.'
+      ,
+      ar:
+        level === 'priority'
+          ? 'تشير إجاباتك إلى مخاوف شيخوخة نشطة قد تستفيد من خطة منظمة.'
+          : level === 'evaluation'
+            ? 'تشير إجاباتك إلى أن استراتيجيات وقائية وتصحيحية قد تساعد.'
+            : 'تشير إجاباتك إلى علامات شيخوخة مبكرة أو خفيفة.'
+    }
+
+    const explanation = {
+      en:
+        'Skin aging responds best to early, consistent sun protection and layered treatment. Home care and professional procedures can both play a role, depending on goals and timeline.',
+      ar:
+        'تستجيب شيخوخة الجلد بشكل أفضل للحماية المنتظمة من الشمس والعلاج المتعدد الطبقات. الرعاية المنزلية والإجراءات الاحترافية يمكن أن تلعب دورًا حسب الأهداف والجدول.'
+    }
+
+    const nextSteps = {
+      en: [
+        'Ensure daily, broad-spectrum sunscreen is the foundation—it prevents 80% of external aging.',
+        'Consider a retinoid (tretinoin or adapalene) if not already in use; takes 12–16 weeks for full effect.',
+        'If home care plateaus after 6+ months, professional treatments (laser, fillers, injectables) can accelerate results.'
+      ],
+      ar: [
+        'تأكد من استخدام واقي الشمس يوميًا واسع الطيف—يمنع 80% من الشيخوخة الخارجية.',
+        'فكر في استخدام ريتينويد (تريتينوين أو أداباليفن) إذا لم تستخدمه؛ 12–16 أسبوع للتأثير الكامل.',
+        'إذا توقفت الرعاية المنزلية بعد 6+ أشهر، العلاجات الاحترافية (ليزر، حشوات، حقن) قد تسرع النتائج.'
+      ]
+    }
+
+    return withRedFlags({ level, score, summary, explanation, nextSteps }, redFlagsByLocale)
+  }
+}
+
+const aestheticGoals: InsightModule = {
+  slug: 'aesthetic-goals',
+  title: { en: 'Aesthetic Goals Planner', ar: 'مخطط الأهداف التجميلية' },
+  description: {
+    en: 'Help clarify your aesthetic goals and match realistic options for treatment.',
+    ar: 'ساعد في توضيح أهدافك التجميلية ومطابقة الخيارات الواقعية للعلاج.'
+  },
+  questions: [
+    {
+      id: 'goal',
+      title: { en: 'What is your primary goal?', ar: 'ما هدفك الأساسي؟' },
+      options: [
+        { id: 'prevent', label: { en: 'Prevent signs of aging', ar: 'منع علامات الشيخوخة' }, score: 1 },
+        { id: 'improve', label: { en: 'Improve existing lines/wrinkles', ar: 'تحسين التجاعيد الموجودة' }, score: 2 },
+        { id: 'enhance', label: { en: 'Enhance features / add volume', ar: 'تعزيز الميزات / إضافة حجم' }, score: 3 },
+        { id: 'restore', label: { en: 'Restore youthful appearance', ar: 'استعادة المظهر الشبابي' }, score: 3 }
+      ]
+    },
+    {
+      id: 'timing',
+      title: { en: 'What is your desired timeline?', ar: 'ما الجدول الزمني المرغوب؟' },
+      options: [
+        { id: 'gradual', label: { en: 'Gradual (6–12 months)', ar: 'تدريجي (6–12 شهر)' }, score: 1 },
+        { id: 'months', label: { en: 'Moderate (2–4 months)', ar: 'متوسط (شهرين إلى 4 أشهر)' }, score: 2 },
+        { id: 'quick', label: { en: 'Quick results (weeks)', ar: 'نتائج سريعة (أسابيع)' }, score: 3 }
+      ]
+    },
+    {
+      id: 'downtime',
+      title: { en: 'How much downtime can you tolerate?', ar: 'كم فترة تعافي تستطيع تحملها؟' },
+      options: [
+        { id: 'none', label: { en: 'None / minimal', ar: 'لا شيء / بسيط' }, score: 1 },
+        { id: 'light', label: { en: 'Light (1–2 days)', ar: 'خفيف (يوم أو يومين)' }, score: 2 },
+        { id: 'moderate', label: { en: 'Moderate (up to 1 week)', ar: 'متوسط (حتى أسبوع)' }, score: 3 },
+        { id: 'significant', label: { en: 'Significant (1–2 weeks)', ar: 'كبير (أسبوع أو أسبوعين)' }, score: 4 }
+      ]
+    },
+    {
+      id: 'natural',
+      title: { en: 'Desired look?', ar: 'المظهر المرغوب؟' },
+      options: [
+        { id: 'subtle', label: { en: 'Subtle / undetectable', ar: 'دقيق / غير واضح' }, score: 1 },
+        { id: 'noticeable', label: { en: 'Noticeable but natural', ar: 'ملحوظ لكن طبيعي' }, score: 2 },
+        { id: 'transformation', label: { en: 'Clear transformation', ar: 'تحويل واضح' }, score: 3 }
+      ]
+    }
+  ],
+  evaluate: (answers) => {
+    const { score, redFlagsByLocale } = computeScore(aestheticGoals, answers)
+    const level = score >= 10 ? 'priority' : score >= 6 ? 'evaluation' : 'informational'
+
+    const summary = {
+      en:
+        level === 'priority'
+          ? 'Your answers suggest you may benefit from professional aesthetic consultation.'
+          : level === 'evaluation'
+            ? 'Your answers suggest a mix of home care and professional options may work.'
+            : 'Your answers suggest home care and preventive strategies are a good start.'
+      ,
+      ar:
+        level === 'priority'
+          ? 'تشير إجاباتك إلى أنك قد تستفيد من استشارة تجميلية احترافية.'
+          : level === 'evaluation'
+            ? 'تشير إجاباتك إلى أن مزيج من الرعاية المنزلية والخيارات الاحترافية قد ينجح.'
+            : 'تشير إجاباتك إلى أن الرعاية المنزلية والاستراتيجيات الوقائية خطوة جيدة للبدء.'
+    }
+
+    const explanation = {
+      en:
+        'Aesthetic goals are personal and span a wide range. Home care addresses prevention and mild concerns; professional treatments (injectables, lasers, fillers) accelerate results for more noticeable changes.',
+      ar:
+        'الأهداف التجميلية شخصية وتشمل نطاقًا واسعًا. الرعاية المنزلية تعالج الوقاية والمخاوف الخفيفة؛ العلاجات الاحترافية (الحقن والليزر والحشوات) تسرع النتائج للتغييرات الأكثر وضوحًا.'
+    }
+
+    const nextSteps = {
+      en: [
+        'Start with consistent sun protection and basic skincare—this addresses 50% of visible aging.',
+        'If goals are prevention-focused, retinoids and antioxidants often suffice.',
+        'If goals include correction or enhancement, consider a consultation to discuss timeline and realistic options.'
+      ],
+      ar: [
+        'ابدأ بحماية الشمس المنتظمة والعناية الأساسية—هذا يعالج 50% من الشيخوخة الظاهرة.',
+        'إذا كانت الأهداف وقائية، غالبًا ما تكون الريتينويدات ومضادات الأكسدة كافية.',
+        'إذا كانت الأهداف تشمل التصحيح أو التعزيز، فكر في استشارة لمناقشة الجدول والخيارات الواقعية.'
+      ]
+    }
+
+    return withRedFlags({ level, score, summary, explanation, nextSteps }, redFlagsByLocale)
+  }
+}
+
 export const insightModules: InsightModule[] = [
   acne,
   hairLoss,
@@ -765,7 +950,9 @@ export const insightModules: InsightModule[] = [
   rosacea,
   eczema,
   psoriasis,
-  whenToConsult
+  whenToConsult,
+  skinAging,
+  aestheticGoals
 ]
 
 export function getInsightModule(slug: string) {
