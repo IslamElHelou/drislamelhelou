@@ -115,6 +115,9 @@ export default function AppointmentRequest({ locale, condition }: Props) {
               <option value="acne">{isAr ? 'حب الشباب' : 'Acne'}</option>
               <option value="hair-loss">{isAr ? 'الشعر وفروة الرأس' : 'Hair & scalp'}</option>
               <option value="pigmentation">{isAr ? 'التصبغات / الكلف' : 'Pigmentation / melasma'}</option>
+              <option value="rosacea">{isAr ? 'الوردية / الاحمرار' : 'Rosacea / redness'}</option>
+              <option value="eczema">{isAr ? 'الإكزيما / التهاب الجلد' : 'Eczema / dermatitis'}</option>
+              <option value="psoriasis">{isAr ? 'الصدفية' : 'Psoriasis'}</option>
               <option value="aesthetic">{isAr ? 'تقييم تجميلي' : 'Aesthetic evaluation'}</option>
             </select>
           </div>

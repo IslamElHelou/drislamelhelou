@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 
 import type { Locale } from '@/lib/i18n'
 import type { Dictionary } from '@/lib/dictionaries'
-import { clinic } from '@/lib/i18n'
+import { clinic, getGoogleMapsDirectionsUrl, getMapEmbedSrc } from '@/lib/i18n'
 
 import { MotionFadeInUp } from '@/components/Motion'
 
@@ -18,6 +18,8 @@ export default function ContactClient({
   t: Dictionary
 }) {
   const dir = useMemo(() => (locale === 'ar' ? 'rtl' : 'ltr'), [locale])
+  const mapDirectionsUrl = getGoogleMapsDirectionsUrl(locale)
+  const mapEmbedSrc = getMapEmbedSrc(locale)
   const [status, setStatus] = useState<Status>('idle')
 
   return (
@@ -26,7 +28,10 @@ export default function ContactClient({
         <MotionFadeInUp>
           <h1 className="h1">{t.contact.title}</h1>
           <p className="muted" style={{ maxWidth: 760 }}>
-            {t.contact.subtitle}
+            {t.contact.subtitle}{' '}
+            {locale === 'ar'
+              ? 'العيادة تقع في الإسكندرية مع سهولة الوصول عبر طريق الجيش.'
+              : 'The clinic is located in Alexandria, with easy access from El Geish Road.'}
           </p>
         </MotionFadeInUp>
       </header>
@@ -88,6 +93,11 @@ export default function ContactClient({
               <div style={{ lineHeight: 1.7 }}>
                 {locale === 'ar' ? clinic.addressAr : clinic.addressEn}
               </div>
+              <div className="muted" style={{ marginTop: 6 }}>
+                {locale === 'ar'
+                  ? 'موقع العيادة مناسب لمراجعات الجلدية الطبية والتجميل والإجراءات الجلدية البسيطة.'
+                  : 'The clinic location is convenient for dermatology consultations, aesthetic visits, and minor skin procedures.'}
+              </div>
             </div>
 
             <div>
@@ -107,14 +117,14 @@ export default function ContactClient({
                 {t.contact.mapLabel}
               </div>
               <div style={{ marginBottom: 10 }}>
-                <a className="link" href={clinic.googleMapsDirectionsUrl} target="_blank" rel="noreferrer">
+                <a className="link" href={mapDirectionsUrl} target="_blank" rel="noreferrer">
                   {locale === 'ar' ? 'افتح الاتجاهات في خرائط Google' : 'Open directions in Google Maps'}
                 </a>
               </div>
               <div className="mapWrap">
                 <iframe
                   title="Google Map"
-                  src={clinic.mapEmbedSrc}
+                  src={mapEmbedSrc}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />

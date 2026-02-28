@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import type { Locale } from '@/lib/i18n'
-import { clinic } from '@/lib/i18n'
+import { clinic, getClinicBrandName } from '@/lib/i18n'
 import { getDictionary } from '@/lib/dictionaries'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LanguageToggle } from '@/components/LanguageToggle'
@@ -13,6 +13,7 @@ import MobileMenu from '@/components/MobileMenu'
 export function Header({ locale }: { locale: Locale }) {
   const t = getDictionary(locale)
   const base = `/${locale}`
+  const brandName = getClinicBrandName(locale)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -29,14 +30,14 @@ export function Header({ locale }: { locale: Locale }) {
           <Link href={base} className="brand">
             <Image
               src="/brand/logo.png"
-              alt={clinic.brandName}
+              alt="Clinic logo"
               width={44}
               height={44}
               priority
               className="brandLogo"
             />
             <div className="brandText">
-              <div className="brandName">{clinic.brandName}</div>
+              <div className="brandName">{brandName}</div>
               <div className="brandTitle">{locale === 'ar' ? clinic.titleAr : clinic.titleEn}</div>
             </div>
           </Link>

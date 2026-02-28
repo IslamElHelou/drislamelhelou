@@ -1,8 +1,29 @@
+import type { Metadata } from 'next'
 import type { Locale } from '@/lib/i18n'
 import { isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/dictionaries'
 import InsightsHubClient from '@/components/InsightsHubClient'
 import SavedInsightsClient from '@/components/SavedInsightsClient'
+import { buildLocalizedMetadata } from '@/lib/seo'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale = (isLocale(lang) ? lang : 'en') as Locale
+
+  return buildLocalizedMetadata({
+    locale,
+    path: '/insights',
+    title: locale === 'ar' ? 'مركز الإرشادات الجلدية التفاعلية' : 'Dermatology Insight Center',
+    description:
+      locale === 'ar'
+        ? 'أدوات تفاعلية تعليمية لفهم حب الشباب، تساقط الشعر، التصبغات، الوردية، الإكزيما، الصدفية، ومتى تحتاج إلى تقييم جلدي.'
+        : 'Interactive educational tools to understand acne, hair loss, pigmentation, rosacea, eczema, psoriasis, and when dermatology review is useful.'
+  })
+}
 
 export default async function InsightsPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params

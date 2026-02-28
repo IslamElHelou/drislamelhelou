@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { clinic } from '@/lib/i18n'
 
 export default function HeroPortrait({
@@ -13,16 +13,18 @@ export default function HeroPortrait({
   titleLine: string
   addressLine: string
 }) {
+  const reduce = useReducedMotion()
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 14, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.45 }}
       style={{ willChange: 'transform' }}
     >
       <motion.div
-        animate={{ y: [0, -3, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+        animate={reduce ? undefined : { y: [0, -3, 0] }}
+        transition={reduce ? undefined : { duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         className="heroCardWrap"
       >
         <div className="heroBackdrop" aria-hidden />
@@ -35,6 +37,8 @@ export default function HeroPortrait({
             sizes="(max-width: 768px) 70vw, 420px"
             style={{ width: '100%', height: 'auto', display: 'block' }}
             priority
+            fetchPriority="high"
+            loading="eager"
           />
           <div style={{ padding: '1rem 1.05rem' }}>
             <div style={{ fontWeight: 900, fontSize: '1.05rem' }}>{nameLine}</div>

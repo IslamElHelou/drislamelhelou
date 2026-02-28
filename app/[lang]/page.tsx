@@ -4,14 +4,38 @@ import { FadeIn } from '@/components/Motion'
 import HeroPortrait from '@/components/HeroPortrait'
 import InsightsPreview from '@/components/InsightsPreview'
 import { getDictionary } from '@/lib/dictionaries'
-import { clinic, isLocale, type Locale } from '@/lib/i18n'
+import { clinic, getClinicBrandName, getGoogleMapsDirectionsUrl, getMapEmbedSrc, isLocale, type Locale } from '@/lib/i18n'
 import { getAllPosts } from '@/lib/mdx'
+import { buildLocalizedMetadata } from '@/lib/seo'
+import type { Metadata } from 'next'
+import { getAllServiceLocationPages } from '@/lib/serviceLocationPages'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale = (isLocale(lang) ? lang : 'en') as Locale
+  const t = getDictionary(locale)
+
+  return buildLocalizedMetadata({
+    locale,
+    path: '',
+    title: locale === 'ar' ? 'د. إسلام الحلو | استشاري الجلدية في الإسكندرية' : 'Dr. Islam El-Helou | Dermatology Clinic in Alexandria',
+    description: t.hero.lead
+  })
+}
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
   const base = `/${locale}`
+  const brandName = getClinicBrandName(locale)
+  const mapDirectionsUrl = getGoogleMapsDirectionsUrl(locale)
+  const mapEmbedSrc = getMapEmbedSrc(locale)
+  const serviceLocationPages = getAllServiceLocationPages()
 
   const address = locale === 'ar' ? clinic.addressAr : clinic.addressEn
   const posts = getAllPosts(locale).slice(0, 3)
@@ -70,6 +94,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <p className="heroSubtitle" style={{ marginTop: '.9rem' }}>
                   {t.hero.lead}
                 </p>
+                <p className="muted" style={{ marginTop: '.65rem', maxWidth: '70ch' }}>
+                  {locale === 'ar'
+                    ? 'عيادة د. إسلام الحلو بالإسكندرية تقدم تشخيصًا منظمًا لحب الشباب، تساقط الشعر، التصبغات، الإكزيما، الصدفية، والإجراءات الجلدية عند الحاجة.'
+                    : 'Dr Islam El Helou Clinic Alexandria offers structured diagnosis for acne, hair loss, pigmentation, eczema, psoriasis, and skin procedures when needed.'}
+                </p>
 
                 <div style={{ display: 'flex', gap: '.8rem', flexWrap: 'wrap', marginTop: '1.1rem' }}>
                   <a
@@ -98,7 +127,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
                 <div className="kpis">
                   <span className="badge">{locale === 'ar' ? 'خبرة +20 سنة' : '20+ years experience'}</span>
-                  <span className="badge">{locale === 'ar' ? 'الإسكندرية • جليم' : 'Alexandria • Gleem'}</span>
+                  <span className="badge">{locale === 'ar' ? 'الإسكندرية' : 'Alexandria'}</span>
                   <span className="badge">{locale === 'ar' ? 'جلدية طبية + تجميل' : 'Medical + Aesthetic'}</span>
                 </div>
               </div>
@@ -170,6 +199,26 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               </div>
             </FadeIn>
           </div>
+
+          <div className="card" style={{ marginTop: '1rem' }}>
+            <div style={{ fontWeight: 900 }}>
+              {locale === 'ar'
+                ? 'صفحات توضيحية للحالات الجلدية الشائعة'
+                : 'Detailed Pages for Common Skin Conditions'}
+            </div>
+            <div className="grid grid2" style={{ marginTop: '.7rem' }}>
+              {serviceLocationPages.map((page) => (
+                <Link
+                  key={page.slug}
+                  href={`${base}/services/${page.slug}`}
+                  className="journalRead"
+                  style={{ width: 'fit-content' }}
+                >
+                  {page.condition[locale]}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -211,6 +260,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <div className="prose">
                 <h2 style={{ marginTop: 0 }}>{t.about.title}</h2>
                 <p>{t.about.body}</p>
+                <p>
+                  {locale === 'ar'
+                    ? 'تقع العيادة على طريق الجيش بالإسكندرية، مع تركيز على الجلدية الطبية وطب التجميل الطبي بخطط علاج واضحة ومتابعة طويلة المدى.'
+                    : 'The clinic is based on El Geish Road in Alexandria, with a focus on medical dermatology and aesthetic medicine through clear plans and long-term follow-up.'}
+                </p>
                 <Link className="btn" href={`${base}/about`} style={{ marginTop: '.6rem' }}>
                   {locale === 'ar' ? 'اقرأ المزيد' : 'Read more'}
                 </Link>
@@ -218,7 +272,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </FadeIn>
             <FadeIn delay={0.06}>
               <div className="card">
-                <div style={{ fontWeight: 900 }}>{clinic.brandName}</div>
+                <div style={{ fontWeight: 900 }}>{brandName}</div>
                 <p style={{ margin: 0 }}>{address}</p>
                 <div style={{ display: 'flex', gap: '.8rem', flexWrap: 'wrap', marginTop: '.9rem' }}>
                   <a
@@ -335,11 +389,16 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       {/* Location */}
       <section className="section">
         <div className="container">
-          <h2 className="sectionTitle">{locale === 'ar' ? 'الموقع' : 'Location'}</h2>
+          <h2 className="sectionTitle">{locale === 'ar' ? 'موقع عيادة د. إسلام الحلو - الإسكندرية' : 'Dr Islam El Helou Clinic Location in Alexandria'}</h2>
           <div className="grid grid2" style={{ alignItems: 'start' }}>
             <div className="card">
-              <div style={{ fontWeight: 900 }}>{clinic.brandName}</div>
+              <div style={{ fontWeight: 900 }}>{brandName}</div>
               <p>{address}</p>
+              <p style={{ color: 'var(--muted)' }}>
+                {locale === 'ar'
+                  ? 'موقع مناسب لزيارات الجلدية الطبية، المتابعة، والإجراءات الجلدية البسيطة في الإسكندرية.'
+                  : 'Conveniently located for medical dermatology visits, follow-up, and minor skin procedures in Alexandria.'}
+              </p>
               <p style={{ marginTop: '.6rem' }}>
                 <a className="link" href={`tel:${clinic.phoneE164}`}>
                   {clinic.phoneE164}
@@ -356,7 +415,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 </a>
               </p>
               <p style={{ marginTop: '.4rem' }}>
-                <a className="link" href={clinic.googleMapsDirectionsUrl} target="_blank" rel="noreferrer">
+                <a className="link" href={mapDirectionsUrl} target="_blank" rel="noreferrer">
                   {locale === 'ar' ? 'الاتجاهات عبر خرائط Google' : 'Directions on Google Maps'}
                 </a>
               </p>
@@ -365,7 +424,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
               <iframe
                 title="Google Map"
-                src={clinic.mapEmbedSrc}
+                src={mapEmbedSrc}
                 width="100%"
                 height="360"
                 loading="lazy"

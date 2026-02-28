@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { FadeIn } from '@/components/Motion'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, isLocale, type Locale } from '@/lib/i18n'
+import { getSiteUrl } from '@/lib/seo'
 
 export async function generateMetadata({
   params
@@ -29,6 +30,7 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
   const { lang } = await params
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
+  const siteUrl = getSiteUrl()
 
   const faqs =
     locale === 'ar'
@@ -47,14 +49,14 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
           },
           {
             q: 'هل تتعاملون مع الحالات الصعبة أو غير المشخصة؟',
-            a: 'نعم. نركز على التشخيص الدقيق، وقد نطلب تحاليل أو خزعة جلدية عند الحاجة.'
+            a: 'نعم. نركز على التشخيص الدقيق، وقد نطلب تحاليل أو عينة من الجلد وتحليل باثولوجي عند الحاجة.'
           },
           {
             q: 'هل تقدمون خدمات تجميلية؟',
             a: 'نعم، مع الحفاظ على الأساس الطبي. نختار الإجراء المناسب فقط عندما يكون آمناً ومفيداً للحالة.'
           },
           {
-            q: 'هل أحتاج لإيقاف أدوية قبل الخزعة أو الإجراءات؟',
+            q: 'هل أحتاج لإيقاف أدوية قبل أخذ عينة من الجلد أو الإجراءات؟',
             a: 'أخبرنا بكل الأدوية (خصوصاً مميعات الدم). سنعطيك تعليمات واضحة قبل أي إجراء.'
           }
         ]
@@ -85,11 +87,34 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
           }
         ]
 
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a
+      }
+    })),
+    mainEntityOfPage: `${siteUrl}/${locale}/faq`
+  }
+
   return (
     <main className="container" style={{ padding: '2rem 0 3rem' }}>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="prose">
         <h1>{t.faq.title}</h1>
-        <p>{t.faq.subtitle}</p>
+        <p>
+          {locale === 'ar'
+            ? 'إجابات عملية حول الحجز والكشف والإجراءات الجلدية في عيادة د. إسلام الحلو بالإسكندرية.'
+            : 'Practical answers about appointments, skin consultations, and dermatology procedures at Dr Islam El Helou Clinic Alexandria.'}
+        </p>
       </div>
 
       <div className="grid" style={{ marginTop: '1.2rem' }}>
@@ -107,8 +132,8 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
         <div style={{ fontWeight: 800 }}>{locale === 'ar' ? 'احجز الآن' : 'Book now'}</div>
         <p style={{ color: 'var(--muted)' }}>
           {locale === 'ar'
-            ? `للحجز أو الاستفسار، تواصل عبر واتساب أو اتصل بنا: ${clinic.phoneE164}`
-            : `For booking or questions, contact us via WhatsApp or call: ${clinic.phoneE164}`}
+            ? `للحجز أو الاستفسار عن خدمات الجلدية والتجميل في عيادة د. إسلام الحلو بالإسكندرية، تواصل عبر واتساب أو اتصل بنا: ${clinic.phoneE164}`
+            : `For booking or questions about dermatology and aesthetic services at Dr Islam El Helou Clinic Alexandria, contact us via WhatsApp or call: ${clinic.phoneE164}`}
         </p>
         <div style={{ display: 'flex', gap: '.7rem', flexWrap: 'wrap' }}>
           <a className="btn btnPrimary" href={`https://wa.me/${clinic.whatsappE164.replace('+', '')}`} target="_blank" rel="noreferrer">

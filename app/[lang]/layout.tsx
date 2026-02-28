@@ -2,16 +2,16 @@ import '@/app/styles/globals.css'
 
 import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
-import Script from 'next/script'
 import { Providers } from './providers'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import PageTransition from '@/components/PageTransition'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import MetaPixel from '@/components/MetaPixel'
 import SiteAnalytics from '@/components/SiteAnalytics'
 import ConsentBanner from '@/components/ConsentBanner'
-import { clinic, getDirection, isLocale, type Locale } from '@/lib/i18n'
+import { clinic, getClinicBrandName, getDirection, getDoctorDisplayName, isLocale, type Locale } from '@/lib/i18n'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -30,10 +30,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang: rawLang } = await params
   const lang = isLocale(rawLang) ? (rawLang as Locale) : 'en'
+  const brandName = getClinicBrandName(lang)
   const title =
     lang === 'ar'
-      ? `${clinic.brandName} | ${clinic.titleAr}`
-      : `${clinic.brandName} | ${clinic.titleEn}`
+      ? `${brandName} | ${clinic.titleAr}`
+      : `${brandName} | ${clinic.titleEn}`
 
   const description =
     lang === 'ar'
@@ -76,12 +77,14 @@ export default async function RootLayout({
   const { lang: rawLang } = await params
   const lang = isLocale(rawLang) ? (rawLang as Locale) : 'en'
   const dir = getDirection(lang)
+  const brandName = getClinicBrandName(lang)
+  const doctorName = getDoctorDisplayName(lang)
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
   const clinicJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalClinic',
-    name: clinic.brandName,
+    name: brandName,
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.drislamelhelou.com',
     telephone: clinic.phoneE164,
     address: {
@@ -94,42 +97,21 @@ export default async function RootLayout({
     medicalSpecialty: 'Dermatology',
     founder: {
       '@type': 'Physician',
-      name: `Dr. ${clinic.doctorName}`
+      name: lang === 'ar' ? doctorName : `Dr. ${doctorName}`
     }
   }
 
   return (
     <html lang={lang} dir={dir} suppressHydrationWarning>
+      <head>
+        {/* Preconnect to Google Analytics and other critical origins */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+      </head>
       <body>
         <Providers>
-          <Script id="consent-default" strategy="beforeInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              window.gtag = window.gtag || gtag;
-              gtag('consent', 'default', {
-                ad_storage: 'denied',
-                analytics_storage: 'denied',
-                ad_user_data: 'denied',
-                ad_personalization: 'denied',
-                wait_for_update: 500
-              });
-            `}
-          </Script>
-          {gaId ? (
-            <>
-              <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
-              <Script id="ga4-base" strategy="afterInteractive">
-                {`
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  window.gtag = gtag;
-                  gtag('js', new Date());
-                  gtag('config', '${gaId}', { send_page_view: false });
-                `}
-              </Script>
-            </>
-          ) : null}
+          <GoogleAnalytics gaId={gaId} />
           <Suspense fallback={null}>
             <MetaPixel />
             <SiteAnalytics />

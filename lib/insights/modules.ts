@@ -348,6 +348,325 @@ const pigmentation: InsightModule = {
   }
 }
 
+const rosacea: InsightModule = {
+  slug: 'rosacea',
+  title: { en: 'Rosacea & Redness Insight', ar: 'إرشادات الوردية والاحمرار' },
+  description: {
+    en: 'A structured guide to understand facial redness, flushing triggers, and when evaluation helps.',
+    ar: 'دليل منظم لفهم احمرار الوجه ومحفزات التورد ومتى يفيد التقييم المتخصص.'
+  },
+  questions: [
+    {
+      id: 'pattern',
+      title: { en: 'What best describes the redness?', ar: 'ما الوصف الأقرب للاحمرار؟' },
+      options: [
+        { id: 'episodic', label: { en: 'Comes and goes', ar: 'يظهر ويختفي' }, score: 2 },
+        { id: 'persistent', label: { en: 'Persistent central facial redness', ar: 'احمرار مستمر بمنتصف الوجه' }, score: 4 },
+        {
+          id: 'bumps',
+          label: { en: 'Redness with bumps/pustules', ar: 'احمرار مع حبوب/بثور' },
+          score: 5
+        }
+      ]
+    },
+    {
+      id: 'triggers',
+      title: { en: 'Do common triggers make it worse?', ar: 'هل تزيدها المحفزات الشائعة؟' },
+      helper: {
+        en: 'Examples: heat, sun, spicy food, hot drinks, stress.',
+        ar: 'مثل: الحرارة، الشمس، الأكل الحار، المشروبات الساخنة، التوتر.'
+      },
+      options: [
+        { id: 'no', label: { en: 'Not clearly', ar: 'ليس بوضوح' }, score: 1 },
+        { id: 'some', label: { en: 'Sometimes', ar: 'أحيانًا' }, score: 2 },
+        { id: 'yes', label: { en: 'Yes, clearly', ar: 'نعم بوضوح' }, score: 3 }
+      ]
+    },
+    {
+      id: 'sensitivity',
+      title: { en: 'How reactive is the skin?', ar: 'ما مدى حساسية الجلد؟' },
+      options: [
+        { id: 'mild', label: { en: 'Mild sensitivity', ar: 'حساسية بسيطة' }, score: 1 },
+        { id: 'sting', label: { en: 'Burning/stinging with products', ar: 'حرقان/لسع مع المنتجات' }, score: 3 },
+        {
+          id: 'severe',
+          label: { en: 'Frequent irritation and flushing', ar: 'تهيج وتورد متكرر' },
+          score: 4
+        }
+      ]
+    },
+    {
+      id: 'eyes',
+      title: { en: 'Any eye symptoms with it?', ar: 'هل توجد أعراض بالعين مع الاحمرار؟' },
+      options: [
+        { id: 'no', label: { en: 'No', ar: 'لا' }, score: 0 },
+        { id: 'mild', label: { en: 'Dry/gritty eyes', ar: 'جفاف/إحساس بالرمل' }, score: 3 },
+        {
+          id: 'pain',
+          label: { en: 'Painful or very irritated eyes', ar: 'ألم أو تهيج شديد بالعين' },
+          score: 6,
+          redFlag: {
+            en: 'Eye irritation with facial redness can benefit from earlier medical assessment.',
+            ar: 'أعراض العين مع احمرار الوجه قد تستفيد من تقييم طبي مبكر.'
+          }
+        }
+      ]
+    }
+  ],
+  evaluate: (answers) => {
+    const { score, redFlagsByLocale } = computeScore(rosacea, answers)
+    const level = score >= 13 ? 'priority' : score >= 8 ? 'evaluation' : 'informational'
+
+    const summary = {
+      en:
+        level === 'priority'
+          ? 'Your answers suggest redness that may benefit from earlier evaluation.'
+          : level === 'evaluation'
+            ? 'Your answers suggest a rosacea-like pattern that may benefit from a structured plan.'
+            : 'Your answers suggest a mild redness/flushing pattern.'
+      ,
+      ar:
+        level === 'priority'
+          ? 'تشير إجاباتك إلى احمرار قد يستفيد من تقييم مبكر.'
+          : level === 'evaluation'
+            ? 'تشير إجاباتك إلى نمط يشبه الوردية وقد يستفيد من خطة منظمة.'
+            : 'تشير إجاباتك إلى نمط احمرار/تورد خفيف.'
+    }
+
+    const explanation = {
+      en:
+        'Facial redness is often trigger-sensitive. Consistent sun protection, gentle skincare, and identifying flushing triggers usually matter more than frequent product changes.',
+      ar:
+        'غالبًا ما يكون احمرار الوجه حساسًا للمحفزات. واقي الشمس المنتظم، والروتين اللطيف، ومعرفة المحفزات أهم عادة من تبديل المنتجات بشكل متكرر.'
+    }
+
+    const nextSteps = {
+      en: [
+        'Use gentle skincare and daily sunscreen; avoid harsh scrubs and frequent exfoliation.',
+        'Track common triggers such as heat, sun, spicy food, and stress.',
+        level === 'informational'
+          ? 'If redness becomes persistent or develops bumps, consider evaluation.'
+          : 'Consider a consultation to confirm the pattern and tailor trigger-focused treatment.'
+      ],
+      ar: [
+        'استخدم روتينًا لطيفًا وواقي شمس يوميًا وتجنب المقشرات القاسية.',
+        'راقب المحفزات الشائعة مثل الحرارة والشمس والأكل الحار والتوتر.',
+        level === 'informational'
+          ? 'إذا أصبح الاحمرار مستمرًا أو ظهر معه حبوب، فكّر في تقييم متخصص.'
+          : 'قد يفيد حجز استشارة لتأكيد النمط ووضع علاج مناسب للمحفزات.'
+      ]
+    }
+
+    return withRedFlags({ level, score, summary, explanation, nextSteps }, redFlagsByLocale)
+  }
+}
+
+const eczema: InsightModule = {
+  slug: 'eczema',
+  title: { en: 'Eczema Insight', ar: 'إرشادات الإكزيما' },
+  description: {
+    en: 'A structured guide to itch, dryness, flare patterns, and when earlier review is useful.',
+    ar: 'دليل منظم للحكة والجفاف ونمط النوبات ومتى تكون المراجعة المبكرة مفيدة.'
+  },
+  questions: [
+    {
+      id: 'itch',
+      title: { en: 'How troublesome is the itch?', ar: 'ما شدة الحكة؟' },
+      options: [
+        { id: 'mild', label: { en: 'Mild', ar: 'بسيطة' }, score: 1 },
+        { id: 'moderate', label: { en: 'Moderate', ar: 'متوسطة' }, score: 3 },
+        { id: 'severe', label: { en: 'Severe / disturbing sleep', ar: 'شديدة / تؤثر على النوم' }, score: 5 }
+      ]
+    },
+    {
+      id: 'pattern',
+      title: { en: 'What best describes the rash?', ar: 'ما الوصف الأقرب للطفح؟' },
+      options: [
+        { id: 'dry', label: { en: 'Dry, rough patches', ar: 'بقع جافة وخشنة' }, score: 2 },
+        { id: 'recurrent', label: { en: 'Recurrent flares', ar: 'نوبات متكررة' }, score: 3 },
+        {
+          id: 'oozing',
+          label: { en: 'Crusting/oozing areas', ar: 'مناطق بها إفرازات/قشور' },
+          score: 6,
+          redFlag: {
+            en: 'Oozing or crusted eczema can need earlier review to assess infection or stronger inflammation.',
+            ar: 'الإكزيما المصحوبة بإفرازات أو قشور قد تحتاج مراجعة مبكرة لتقييم العدوى أو شدة الالتهاب.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'spread',
+      title: { en: 'How widespread is it?', ar: 'ما مدى انتشارها؟' },
+      options: [
+        { id: 'small', label: { en: 'Small areas only', ar: 'مناطق محدودة' }, score: 1 },
+        { id: 'several', label: { en: 'Several body areas', ar: 'عدة مناطق بالجسم' }, score: 3 },
+        { id: 'large', label: { en: 'Large/widespread areas', ar: 'مناطق واسعة/منتشرة' }, score: 5 }
+      ]
+    },
+    {
+      id: 'response',
+      title: { en: 'How has basic care worked so far?', ar: 'كيف كانت الاستجابة للعناية الأساسية؟' },
+      helper: {
+        en: 'Examples: moisturizer, fragrance avoidance, gentle cleansers.',
+        ar: 'مثل: الترطيب، تجنب العطور، واستخدام غسول لطيف.'
+      },
+      options: [
+        { id: 'better', label: { en: 'It improved', ar: 'تحسنت' }, score: 1 },
+        { id: 'partial', label: { en: 'Only partial improvement', ar: 'تحسن جزئي فقط' }, score: 3 },
+        { id: 'none', label: { en: 'Little or no improvement', ar: 'تحسن بسيط جدًا أو لا يوجد' }, score: 4 }
+      ]
+    }
+  ],
+  evaluate: (answers) => {
+    const { score, redFlagsByLocale } = computeScore(eczema, answers)
+    const level = score >= 14 ? 'priority' : score >= 9 ? 'evaluation' : 'informational'
+
+    const summary = {
+      en:
+        level === 'priority'
+          ? 'Your answers suggest eczema that may benefit from earlier medical review.'
+          : level === 'evaluation'
+            ? 'Your answers suggest eczema that may benefit from a structured treatment plan.'
+            : 'Your answers suggest a mild eczema pattern.'
+      ,
+      ar:
+        level === 'priority'
+          ? 'تشير إجاباتك إلى إكزيما قد تستفيد من مراجعة طبية مبكرة.'
+          : level === 'evaluation'
+            ? 'تشير إجاباتك إلى إكزيما قد تستفيد من خطة علاج منظمة.'
+            : 'تشير إجاباتك إلى نمط إكزيما خفيف.'
+    }
+
+    const explanation = {
+      en:
+        'Eczema control usually depends on barrier repair, trigger reduction, and timely treatment during flares. Recurrent or widespread disease often needs a more structured plan.',
+      ar:
+        'يعتمد التحكم في الإكزيما غالبًا على إصلاح حاجز الجلد وتقليل المحفزات والعلاج المناسب أثناء النوبات. الحالات المتكررة أو الواسعة قد تحتاج خطة أكثر تنظيمًا.'
+    }
+
+    const nextSteps = {
+      en: [
+        'Prioritize frequent moisturizer use and avoid fragranced or harsh products.',
+        'Use lukewarm showers and reduce friction from scratching when possible.',
+        level === 'informational'
+          ? 'If flares become frequent or spread, consider evaluation.'
+          : 'Consider a consultation to confirm the trigger pattern and adjust treatment intensity.'
+      ],
+      ar: [
+        'اهتم باستخدام المرطب بانتظام وتجنب المنتجات المعطرة أو القاسية.',
+        'استخدم ماءً فاترًا وقلل الاحتكاك الناتج عن الحك قدر الإمكان.',
+        level === 'informational'
+          ? 'إذا أصبحت النوبات متكررة أو منتشرة، فكّر في تقييم متخصص.'
+          : 'قد يفيد حجز استشارة لتحديد المحفزات وضبط شدة العلاج.'
+      ]
+    }
+
+    return withRedFlags({ level, score, summary, explanation, nextSteps }, redFlagsByLocale)
+  }
+}
+
+const psoriasis: InsightModule = {
+  slug: 'psoriasis',
+  title: { en: 'Psoriasis Insight', ar: 'إرشادات الصدفية' },
+  description: {
+    en: 'A structured guide to plaque patterns, scalp/nail involvement, and when a broader plan is helpful.',
+    ar: 'دليل منظم لأنماط اللويحات ومشاركة فروة الرأس أو الأظافر ومتى تكون الخطة الأوسع مفيدة.'
+  },
+  questions: [
+    {
+      id: 'plaques',
+      title: { en: 'What best describes the skin changes?', ar: 'ما الوصف الأقرب لتغيرات الجلد؟' },
+      options: [
+        { id: 'small', label: { en: 'Small dry plaques', ar: 'لويحات صغيرة جافة' }, score: 2 },
+        { id: 'thick', label: { en: 'Thicker/scaly plaques', ar: 'لويحات أكثر سماكة وتقشرًا' }, score: 4 },
+        { id: 'widespread', label: { en: 'Multiple or widespread plaques', ar: 'لويحات متعددة أو واسعة' }, score: 5 }
+      ]
+    },
+    {
+      id: 'sites',
+      title: { en: 'Where is it affecting you most?', ar: 'أين تؤثر أكثر؟' },
+      options: [
+        { id: 'limited', label: { en: 'Elbows/knees only', ar: 'الأكواع/الركبتان فقط' }, score: 2 },
+        { id: 'scalp', label: { en: 'Scalp or face involvement', ar: 'فروة الرأس أو الوجه' }, score: 4 },
+        { id: 'nails', label: { en: 'Nails and other areas too', ar: 'الأظافر ومناطق أخرى أيضًا' }, score: 5 }
+      ]
+    },
+    {
+      id: 'joints',
+      title: { en: 'Any joint symptoms with the skin disease?', ar: 'هل توجد أعراض بالمفاصل مع الجلد؟' },
+      options: [
+        { id: 'no', label: { en: 'No', ar: 'لا' }, score: 0 },
+        { id: 'some', label: { en: 'Some stiffness/ache', ar: 'تيبس/ألم بسيط' }, score: 4 },
+        {
+          id: 'clear',
+          label: { en: 'Clear swelling or morning stiffness', ar: 'تورم واضح أو تيبس صباحي' },
+          score: 7,
+          redFlag: {
+            en: 'Joint symptoms alongside psoriasis should be assessed clinically.',
+            ar: 'وجود أعراض بالمفاصل مع الصدفية يستدعي تقييمًا إكلينيكيًا.'
+          }
+        }
+      ]
+    },
+    {
+      id: 'control',
+      title: { en: 'How has it responded to treatment so far?', ar: 'كيف كانت الاستجابة للعلاج حتى الآن؟' },
+      options: [
+        { id: 'good', label: { en: 'Usually controlled', ar: 'غالبًا تحت السيطرة' }, score: 1 },
+        { id: 'partial', label: { en: 'Partial or short-lived control', ar: 'تحكم جزئي أو مؤقت' }, score: 3 },
+        { id: 'poor', label: { en: 'Persistent despite treatment', ar: 'مستمرة رغم العلاج' }, score: 5 }
+      ]
+    }
+  ],
+  evaluate: (answers) => {
+    const { score, redFlagsByLocale } = computeScore(psoriasis, answers)
+    const level = score >= 15 ? 'priority' : score >= 9 ? 'evaluation' : 'informational'
+
+    const summary = {
+      en:
+        level === 'priority'
+          ? 'Your answers suggest psoriasis that may benefit from earlier review.'
+          : level === 'evaluation'
+            ? 'Your answers suggest psoriasis that may benefit from a more structured plan.'
+            : 'Your answers suggest a limited psoriasis pattern.'
+      ,
+      ar:
+        level === 'priority'
+          ? 'تشير إجاباتك إلى صدفية قد تستفيد من مراجعة مبكرة.'
+          : level === 'evaluation'
+            ? 'تشير إجاباتك إلى صدفية قد تستفيد من خطة أكثر تنظيمًا.'
+            : 'تشير إجاباتك إلى نمط صدفية محدود.'
+    }
+
+    const explanation = {
+      en:
+        'Psoriasis is usually managed as a chronic inflammatory condition. Extent, scalp or nail involvement, and joint symptoms all influence how intensive treatment needs to be.',
+      ar:
+        'تُدار الصدفية عادة كحالة التهابية مزمنة. مدى الانتشار، ومشاركة فروة الرأس أو الأظافر، وأعراض المفاصل كلها تؤثر على شدة الخطة العلاجية.'
+    }
+
+    const nextSteps = {
+      en: [
+        'Keep routines consistent and avoid picking or overly aggressive scrubbing of plaques.',
+        'Note whether scalp, nails, or joints are affected, since that changes planning.',
+        level === 'informational'
+          ? 'If plaques spread or recur frequently, consider evaluation.'
+          : 'Consider a consultation to assess extent and decide whether broader control is needed.'
+      ],
+      ar: [
+        'حافظ على روتين ثابت وتجنب العبث باللويحات أو فركها بعنف.',
+        'سجل ما إذا كانت فروة الرأس أو الأظافر أو المفاصل متأثرة لأن ذلك يغير الخطة.',
+        level === 'informational'
+          ? 'إذا انتشرت اللويحات أو تكررت كثيرًا، فكّر في تقييم متخصص.'
+          : 'قد يفيد حجز استشارة لتقييم مدى الحالة وتحديد الحاجة لخطة أوسع.'
+      ]
+    }
+
+    return withRedFlags({ level, score, summary, explanation, nextSteps }, redFlagsByLocale)
+  }
+}
+
 const whenToConsult: InsightModule = {
   slug: 'when-to-consult',
   title: { en: 'When to Consult', ar: 'متى أزور طبيب الجلدية؟' },
@@ -439,7 +758,15 @@ const whenToConsult: InsightModule = {
   }
 }
 
-export const insightModules: InsightModule[] = [acne, hairLoss, pigmentation, whenToConsult]
+export const insightModules: InsightModule[] = [
+  acne,
+  hairLoss,
+  pigmentation,
+  rosacea,
+  eczema,
+  psoriasis,
+  whenToConsult
+]
 
 export function getInsightModule(slug: string) {
   return insightModules.find((m) => m.slug === slug)

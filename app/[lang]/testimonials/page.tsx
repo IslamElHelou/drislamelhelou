@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, isLocale, type Locale } from '@/lib/i18n'
 import TestimonialsSlider, { type Review } from '@/components/TestimonialsSlider'
+import { getPublisherLogo, getSiteUrl } from '@/lib/seo'
 
 export async function generateMetadata({
   params
@@ -29,6 +30,7 @@ export default async function TestimonialsPage({ params }: { params: Promise<{ l
   const { lang } = await params
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
+  const siteUrl = getSiteUrl()
 
   const reviews: Review[] =
     locale === 'ar'
@@ -71,11 +73,53 @@ export default async function TestimonialsPage({ params }: { params: Promise<{ l
           }
         ]
 
+  const reviewsJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalClinic',
+    name: locale === 'ar' ? clinic.brandNameAr : clinic.brandName,
+    url: `${siteUrl}/${locale}/testimonials`,
+    image: getPublisherLogo(),
+    telephone: clinic.phoneE164,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: locale === 'ar' ? clinic.addressAr : clinic.addressEn,
+      addressLocality: 'Alexandria',
+      addressCountry: 'EG'
+    },
+    review: reviews.map((review) => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: review.name
+      },
+      reviewBody: review.body,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+        worstRating: '1'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: review.source
+      }
+    }))
+  }
+
   return (
     <main className="container" style={{ padding: '2rem 0 3rem' }}>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
+      />
       <div className="prose">
         <h1>{t.testimonials.title}</h1>
-        <p>{t.testimonials.subtitle}</p>
+        <p>
+          {locale === 'ar'
+            ? 'مراجعات منشورة من مرضى عن تجربة الجلدية الطبية وطب التجميل مع د. إسلام الحلو في الإسكندرية.'
+            : 'Published patient feedback about medical dermatology and aesthetic care at Dr Islam El Helou Clinic Alexandria.'}
+        </p>
       </div>
 
       <div style={{ marginTop: '1.2rem' }}>

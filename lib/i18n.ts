@@ -37,7 +37,7 @@ export const clinic = {
   googleMapsDirectionsUrlAr:
     'https://www.google.com/maps/dir/?api=1&destination=31.2414311,29.9603369&destination_place_id=ChIJKxUxarFFJCIRHgcgTEJuCRM&hl=ar',
   // Public Google search (reviews link) – safe default if Place ID is unknown
-  googleReviewsUrl: 'https://www.google.com/search?q=Dr+Islam+El-Helou+Gleem+Alexandria+reviews',
+  googleReviewsUrl: 'https://www.google.com/search?q=Dr+Islam+El-Helou+Clinic+Alexandria+reviews',
   facebookUrl: 'https://facebook.com/DrIslamElHelou',
   instagramUrl: 'https://instagram.com/Dr.islam_elhelou'
 } as const

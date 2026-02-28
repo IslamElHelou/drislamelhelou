@@ -39,10 +39,10 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
+    "@types/node": "^25.3.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
-    "eslint": "^9.0.0",
+    "eslint": "^10.0.2",
     "eslint-config-next": "16.1.6",
     "typescript": "^5.7.2"
   }

@@ -57,41 +57,60 @@ export async function POST(req: Request) {
       locale
     })
 
+    let emailNotified = false
+
     // Email notify
     const apiKey = process.env.RESEND_API_KEY
     const notifyTo = process.env.APPOINTMENT_NOTIFICATION_EMAIL || process.env.LEAD_NOTIFICATION_EMAIL
     if (apiKey && notifyTo) {
-      const resend = new Resend(apiKey)
-      const from = process.env.LEAD_FROM_EMAIL || 'Website Lead <onboarding@resend.dev>'
+      try {
+        const resend = new Resend(apiKey)
+        const from = process.env.LEAD_FROM_EMAIL || 'Website Lead <onboarding@resend.dev>'
 
-      const safe = (s: string) =>
-        s
-          .replaceAll('&', '&amp;')
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;')
-          .replaceAll('"', '&quot;')
+        const safe = (s: string) =>
+          s
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
 
-      const html = `
-        <div style="font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; line-height: 1.5;">
-          <h2 style="margin:0 0 12px;">New Appointment Request</h2>
-          <table style="border-collapse: collapse; width: 100%; max-width: 640px;">
-            <tr><td style="padding:6px 0; color:#444;"><strong>Name</strong></td><td style="padding:6px 0;">${safe(name)}</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>Phone / WhatsApp</strong></td><td style="padding:6px 0;">${safe(phone)}</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>Email</strong></td><td style="padding:6px 0;">${email ? safe(email) : 'Not provided'}</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>Condition</strong></td><td style="padding:6px 0;">${safe(condition || 'General')}</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>Preferred time</strong></td><td style="padding:6px 0;">${safe(preferred)}</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>Status</strong></td><td style="padding:6px 0;">New</td></tr>
-            <tr><td style="padding:6px 0; color:#444;"><strong>ID</strong></td><td style="padding:6px 0;">${safe(id)}</td></tr>
-          </table>
-          <p style="margin:16px 0 0; color:#666; font-size: 13px;">Submitted from the clinic website appointment request form.</p>
-        </div>
-      `
+        const html = `
+          <div style="font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; line-height: 1.5;">
+            <h2 style="margin:0 0 12px;">New Appointment Request</h2>
+            <table style="border-collapse: collapse; width: 100%; max-width: 640px;">
+              <tr><td style="padding:6px 0; color:#444;"><strong>Name</strong></td><td style="padding:6px 0;">${safe(name)}</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>Phone / WhatsApp</strong></td><td style="padding:6px 0;">${safe(phone)}</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>Email</strong></td><td style="padding:6px 0;">${email ? safe(email) : 'Not provided'}</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>Condition</strong></td><td style="padding:6px 0;">${safe(condition || 'General')}</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>Preferred time</strong></td><td style="padding:6px 0;">${safe(preferred)}</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>Status</strong></td><td style="padding:6px 0;">New</td></tr>
+              <tr><td style="padding:6px 0; color:#444;"><strong>ID</strong></td><td style="padding:6px 0;">${safe(id)}</td></tr>
+            </table>
+            <p style="margin:16px 0 0; color:#666; font-size: 13px;">Submitted from the clinic website appointment request form.</p>
+          </div>
+        `
 
-      await resend.emails.send({
-        from,
-        to: notifyTo,
-        subject: `Appointment Request — ${condition || 'General'}`,
-        html
+        await resend.emails.send({
+          from,
+          to: notifyTo,
+          subject: `Appointment Request — ${condition || 'General'}`,
+          html,
+          ...(email ? { replyTo: email } : {})
+        })
+        emailNotified = true
+      } catch (error) {
+        console.error('[APPOINTMENT_EMAIL_FAILED]', {
+          id,
+          notifyTo,
+          condition,
+          error
+        })
+      }
+    } else {
+      console.warn('[APPOINTMENT_EMAIL_SKIPPED]', {
+        id,
+        hasApiKey: Boolean(apiKey),
+        hasNotifyTo: Boolean(notifyTo)
       })
     }
 
@@ -101,7 +120,7 @@ export async function POST(req: Request) {
 
     const whatsappUrl = `https://wa.me/${clinic.whatsappE164.replace('+', '')}?text=${encodeURIComponent(msg)}`
 
-    return NextResponse.json({ success: true, whatsappUrl })
+    return NextResponse.json({ success: true, whatsappUrl, emailNotified })
   } catch {
     return NextResponse.json({ success: false }, { status: 500 })
   }

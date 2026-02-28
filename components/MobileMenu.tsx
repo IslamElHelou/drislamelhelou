@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Locale } from '@/lib/i18n'
-import { clinic } from '@/lib/i18n'
+import { clinic, getClinicBrandName } from '@/lib/i18n'
 
 type Labels = {
   home: string
@@ -30,6 +31,12 @@ export default function MobileMenu({
   rightSlot?: React.ReactNode
 }) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const brandName = getClinicBrandName(locale)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -113,60 +120,63 @@ export default function MobileMenu({
         )}
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              className="mobileOverlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setOpen(false)}
-            />
-            <motion.aside
-              className="mobileSheet"
-              initial={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
-              animate={{ x: 0, opacity: 1, scale: 1 }}
-              exit={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.18 }}
-            >
-              <div className="mobileSheetTop">
-                <div>
-                  <div className="mobileBrand">{clinic.brandName}</div>
-                  <div className="mobileSub">
-                    {locale === 'ar' ? clinic.titleAr : clinic.titleEn}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {open && (
+            <>
+              <motion.div
+                className="mobileOverlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setOpen(false)}
+              />
+              <motion.aside
+                className="mobileSheet"
+                initial={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
+                animate={{ x: 0, opacity: 1, scale: 1 }}
+                exit={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.18 }}
+              >
+                <div className="mobileSheetTop">
+                  <div>
+                    <div className="mobileBrand">{brandName}</div>
+                    <div className="mobileSub">
+                      {locale === 'ar' ? clinic.titleAr : clinic.titleEn}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {rightSlot}
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {rightSlot}
+
+                <nav className="mobileLinks" aria-label="Mobile">
+                  {links.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={() => setOpen(false)}
+                      className="mobileLink"
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="mobileSocial">
+                  <a href={clinic.facebookUrl} target="_blank" rel="noreferrer" className="mobileSocialBtn">
+                    Facebook
+                  </a>
+                  <a href={clinic.instagramUrl} target="_blank" rel="noreferrer" className="mobileSocialBtn">
+                    Instagram
+                  </a>
                 </div>
-              </div>
-
-              <nav className="mobileLinks" aria-label="Mobile">
-                {links.map((l) => (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="mobileLink"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mobileSocial">
-                <a href={clinic.facebookUrl} target="_blank" rel="noreferrer" className="mobileSocialBtn">
-                  Facebook
-                </a>
-                <a href={clinic.instagramUrl} target="_blank" rel="noreferrer" className="mobileSocialBtn">
-                  Instagram
-                </a>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   )
 }

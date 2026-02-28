@@ -9,3 +9,5 @@ out
 .env.test
 .DS_Store
 .vercel
+
+.vercel

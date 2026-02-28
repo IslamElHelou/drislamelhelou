@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { locales, type Locale } from '@/lib/i18n'
 import { getAllPostSlugs } from '@/lib/mdx'
 import { insightModules } from '@/lib/insights/modules'
+import { SERVICE_LOCATION_SLUGS } from '@/lib/serviceLocationPages'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.drislamelhelou.com'
@@ -18,7 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/faq',
     '/testimonials',
     '/results',
-    '/contact'
+    '/contact',
+    ...SERVICE_LOCATION_SLUGS.map((slug) => `/services/${slug}`)
   ]
 
   const entries: MetadataRoute.Sitemap = []

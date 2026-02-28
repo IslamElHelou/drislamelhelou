@@ -53,6 +53,27 @@ export default function InsightsPreview({ locale }: { locale: Locale }) {
           : "Clarify common patterns and key decision points.",
       },
       {
+        slug: "rosacea",
+        title: isAr ? "إرشادات الوردية والاحمرار" : "Rosacea & Redness Insight",
+        desc: isAr
+          ? "فهم احمرار الوجه ومحفزات التورد وخطوات العناية العملية."
+          : "Understand facial redness, flushing triggers, and practical care steps.",
+      },
+      {
+        slug: "eczema",
+        title: isAr ? "إرشادات الإكزيما" : "Eczema Insight",
+        desc: isAr
+          ? "تنظيم التفكير في الحكة والجفاف والنوبات المتكررة."
+          : "Structure itch, dryness, and flare patterns before a visit.",
+      },
+      {
+        slug: "psoriasis",
+        title: isAr ? "إرشادات الصدفية" : "Psoriasis Insight",
+        desc: isAr
+          ? "تقدير مدى اللويحات وتأثير فروة الرأس والأظافر والمفاصل."
+          : "Assess plaque extent and the impact of scalp, nail, and joint symptoms.",
+      },
+      {
         slug: "when-to-consult",
         title: isAr ? "متى تحتاج طبيب جلدية" : "When to Consult",
         desc: isAr

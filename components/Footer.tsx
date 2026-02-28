@@ -1,15 +1,16 @@
 import type { Locale } from '@/lib/i18n'
-import { clinic } from '@/lib/i18n'
+import { clinic, getClinicBrandName } from '@/lib/i18n'
 
 export function Footer({ locale }: { locale: Locale }) {
   const isAr = locale === 'ar'
+  const brandName = getClinicBrandName(locale)
 
   return (
     <footer className="footerElite" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="container footerEliteInner">
         <div className="footerEliteTop">
           <div className="footerEliteBrand">
-            <div className="footerEliteName">Dr. Islam ElHelou</div>
+            <div className="footerEliteName">{brandName}</div>
             <div className="footerEliteTagline">
               {isAr
                 ? 'ممارسة جلدية منظّمة في الإسكندرية — دقة طبية مع اهتمام إنساني.'
@@ -50,7 +51,7 @@ export function Footer({ locale }: { locale: Locale }) {
 
         <div className="footerEliteBottom">
           <div>
-            © {new Date().getFullYear()} {clinic.brandName}. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
+            © {new Date().getFullYear()} {brandName}. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
           </div>
           <div>{isAr ? 'تصميم هادئ — تجربة سريعة.' : 'Quiet design — fast experience.'}</div>
         </div>

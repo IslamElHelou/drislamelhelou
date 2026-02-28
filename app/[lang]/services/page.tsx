@@ -1,6 +1,10 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
 import type { Locale } from '@/lib/i18n'
 import { isLocale } from '@/lib/i18n'
 import { ServicesGrid } from '@/components/ServicesGrid'
+import { buildLocalizedMetadata } from '@/lib/seo'
+import { getAllServiceLocationPages } from '@/lib/serviceLocationPages'
 
 const services = {
   medical: {
@@ -31,7 +35,7 @@ const services = {
   },
   procedures: {
     en: ['Biopsy', 'Cryotherapy', 'Intralesional injections', 'Cyst / wart management', 'Minor dermatologic surgery'],
-    ar: ['خزعة جلد', 'كي بالتبريد', 'حقن موضعي', 'التعامل مع الثآليل والأكياس', 'جراحات جلدية بسيطة']
+    ar: ['عينة من الجلد وتحليل باثولوجي', 'كي بالتبريد', 'حقن موضعي', 'التعامل مع الثآليل والأكياس', 'جراحات جلدية بسيطة']
   },
   aesthetic: {
     en: ['Botox (as indicated)', 'Fillers (natural enhancement)', 'Chemical peels', 'Scar & texture plans', 'Skin rejuvenation protocols'],
@@ -39,20 +43,40 @@ const services = {
   }
 }
 
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale = (isLocale(lang) ? lang : 'en') as Locale
+
+  return buildLocalizedMetadata({
+    locale,
+    path: '/services',
+    title: locale === 'ar' ? 'الخدمات الجلدية والتجميلية' : 'Dermatology Services',
+    description:
+      locale === 'ar'
+        ? 'خدمات الجلدية الطبية، أخذ عينة من الجلد وتحليل باثولوجي والإجراءات الجلدية، وطب التجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية.'
+        : 'Medical dermatology, skin procedures, biopsies, and safety-first aesthetic services at Dr. Islam El-Helou’s clinic in Alexandria.'
+  })
+}
+
 export default async function ServicesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const L = locale === 'ar' ? 'ar' : 'en'
+  const serviceLocationPages = getAllServiceLocationPages()
 
   return (
     <section className="section">
       <div className="container">
         <div className="prose">
-          <h1>{locale === 'ar' ? 'الخدمات' : 'Services'}</h1>
+          <h1>{locale === 'ar' ? 'خدمات الجلدية وطب التجميل | عيادة د. إسلام الحلو - الإسكندرية' : 'Dermatology Services | Dr Islam El Helou Clinic Alexandria'}</h1>
           <p>
             {locale === 'ar'
-              ? 'مزيج بين الجلدية الطبية والتجميل الآمن. سيتم تحديد الأنسب بعد التقييم.'
-              : 'A balanced mix of medical dermatology and safety-first aesthetics. The best option is chosen after evaluation.'}
+              ? 'مزيج بين الجلدية الطبية والتجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية. يتم اختيار الأنسب بعد التقييم والتشخيص.'
+              : 'A balanced mix of medical dermatology and safety-first aesthetics at Dr Islam El Helou Clinic Alexandria. The best option is chosen after evaluation and diagnosis.'}
           </p>
         </div>
 
@@ -94,9 +118,37 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
             <div style={{ fontWeight: 900, fontSize: '1.1rem' }}>{locale === 'ar' ? 'سياسة التوقعات الواقعية' : 'Realistic expectations policy'}</div>
             <p style={{ color: 'var(--muted)', marginBottom: 0 }}>
               {locale === 'ar'
-                ? 'بعض الأمراض الوراثية أو المزمنة قد تحتاج خطة طويلة المدى وتحسن تدريجي. سيتم شرح ما يمكن وما لا يمكن تحقيقه بوضوح.'
-                : 'Some genetic or chronic conditions require long-term plans and gradual improvement. We explain clearly what is and isn’t realistically achievable.'}
+                ? 'بعض الأمراض الوراثية أو المزمنة قد تحتاج خطة طويلة المدى وتحسن تدريجي. سيتم شرح ما يمكن وما لا يمكن تحقيقه بوضوح أثناء زيارتك في عيادة د. إسلام الحلو بالإسكندرية.'
+                : 'Some genetic or chronic conditions require long-term plans and gradual improvement. We explain clearly what is and isn’t realistically achievable during your visit at Dr Islam El Helou Clinic Alexandria.'}
             </p>
+          </div>
+        </div>
+
+        <div className="card" style={{ marginTop: '1rem' }}>
+          <div style={{ fontWeight: 900, fontSize: '1.1rem' }}>
+            {locale === 'ar'
+              ? 'صفحات توضيحية للحالات الجلدية الشائعة'
+              : 'Detailed Pages for Common Skin Conditions'}
+          </div>
+          <p style={{ color: 'var(--muted)' }}>
+            {locale === 'ar'
+              ? 'اطلع على صفحات مفصلة لحب الشباب، تساقط الشعر، التصبغات، والصدفية مع شرح عملي لطريقة التقييم والعلاج.'
+              : 'Explore detailed pages for acne, hair loss, pigmentation, and psoriasis with practical guidance on evaluation and care.'}
+          </p>
+          <div className="grid grid2">
+            {serviceLocationPages.map((page) => (
+              <Link
+                key={page.slug}
+                href={`/${locale}/services/${page.slug}`}
+                className="card"
+                style={{ textDecoration: 'none' }}
+              >
+                <div style={{ fontWeight: 800 }}>{page.title[locale]}</div>
+                <div className="journalRead" style={{ marginTop: 8 }}>
+                  {locale === 'ar' ? 'عرض الصفحة' : 'View page'}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

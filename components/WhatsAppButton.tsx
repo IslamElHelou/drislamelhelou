@@ -6,7 +6,7 @@ export function WhatsAppButton({ label }: { label: string }) {
 
   return (
     <div className="whatsapp">
-      <a href={href} target="_blank" rel="noreferrer">
+      <a href={href} target="_blank" rel="noreferrer" aria-label={`Contact us on ${label}`}>
         <span aria-hidden style={{ display: 'inline-flex', width: 22, height: 22, color: '#1a7f52' }}>
           <svg viewBox="0 0 32 32" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

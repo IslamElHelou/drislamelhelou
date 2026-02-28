@@ -200,6 +200,8 @@ html[data-theme='light'] .heroPhilosophy { background: rgba(255, 255, 255, 0.75)
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 0;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .navlinks {
@@ -249,22 +251,26 @@ html[data-theme='light'] .iconBtn { background: rgba(255,255,255,.7); }
 
 .kpis { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
 
-.section { padding: 2.2rem 0; }
+.section {
+  padding: 2.2rem 0;
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px 800px;
+}
 .sectionTitle { font-size: 1.4rem; margin: 0 0 .9rem; }
 
 
 /* ---------- Mobile-first navigation ---------- */
 .navlinks { display: none; }
-.mobileNav { display: inline-flex; align-items: center; gap: .4rem; }
-@media (min-width: 980px) {
+.mobileNav { display: inline-flex; align-items: center; gap: .4rem; flex: 0 0 auto; }
+@media (min-width: 1120px) {
   .navlinks { display: flex; }
   .mobileNav { display: none; }
 }
-.brand { display: flex; align-items: center; gap: .75rem; }
+.brand { display: flex; align-items: center; gap: .75rem; min-width: 0; flex: 1 1 auto; }
 .brandLogo { border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(2, 6, 23, 0.12); }
-.brandText { line-height: 1.15; }
-.brandName { font-weight: 800; letter-spacing: -0.01em; }
-.brandTitle { font-size: .86rem; color: var(--muted); }
+.brandText { line-height: 1.15; min-width: 0; }
+.brandName { font-weight: 800; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brandTitle { font-size: .86rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .iconBtnStrong {
   width: 40px;
@@ -273,6 +279,8 @@ html[data-theme='light'] .iconBtn { background: rgba(255,255,255,.7); }
     radial-gradient(420px 200px at 20% 10%, rgba(99, 102, 241, 0.20), transparent 55%),
     var(--card);
   box-shadow: 0 16px 40px rgba(2, 6, 23, 0.14);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Mobile sheet */
@@ -1176,12 +1184,16 @@ html[data-theme='light'] .leadInput {
   }
 
   .brand {
-    gap: .65rem;
+    gap: .55rem;
   }
 
   .brandLogo {
     width: 44px;
     height: 44px;
+  }
+
+  .brandText {
+    max-width: min(58vw, 220px);
   }
 
   .brandName {

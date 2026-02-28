@@ -1,8 +1,27 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import type { Locale } from '@/lib/i18n'
 import { isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/dictionaries'
 import { getAllPosts } from '@/lib/mdx'
+import { buildLocalizedMetadata } from '@/lib/seo'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale = (isLocale(lang) ? lang : 'en') as Locale
+  const t = getDictionary(locale)
+
+  return buildLocalizedMetadata({
+    locale,
+    path: '/blog',
+    title: t.blog.title,
+    description: t.blog.subtitle
+  })
+}
 
 export default async function BlogIndex({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params

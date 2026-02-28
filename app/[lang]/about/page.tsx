@@ -1,17 +1,41 @@
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import type { Locale } from '@/lib/i18n'
-import { clinic, isLocale } from '@/lib/i18n'
+import { clinic, getClinicBrandName, getDoctorDisplayName, isLocale } from '@/lib/i18n'
+import { buildLocalizedMetadata } from '@/lib/seo'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale = (isLocale(lang) ? lang : 'en') as Locale
+  const doctorName = getDoctorDisplayName(locale)
+
+  return buildLocalizedMetadata({
+    locale,
+    path: '/about',
+    title: locale === 'ar' ? `عن د. ${doctorName}` : `About Dr. ${doctorName}`,
+    description:
+      locale === 'ar'
+        ? 'تعرف على خبرة د. إسلام الحلو في الجلدية الطبية وطب التجميل ونهجه القائم على التشخيص الدقيق والخطط العلاجية الواقعية.'
+        : 'Learn about Dr. Islam El-Helou’s experience in medical dermatology and aesthetic medicine, with a diagnosis-first and realistic treatment approach.'
+  })
+}
 
 export default async function About({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const locale = (isLocale(lang) ? lang : 'en') as Locale
+  const doctorName = getDoctorDisplayName(locale)
+  const brandName = getClinicBrandName(locale)
 
   return (
     <section className="section">
       <div className="container">
         <div className="grid grid2" style={{ alignItems: 'start' }}>
           <div className="prose">
-            <h1>{locale === 'ar' ? `عن د. ${clinic.doctorName}` : `About Dr. ${clinic.doctorName}`}</h1>
+            <h1>{locale === 'ar' ? `عن د. ${doctorName}` : `About Dr. ${doctorName}`}</h1>
             <p>
               {locale === 'ar'
                 ? 'استشاري الأمراض الجلدية في الإسكندرية. خبرة واسعة في الجلدية الطبية مع اهتمام بالتجميل الآمن والنتائج الطبيعية.'
@@ -38,7 +62,7 @@ export default async function About({ params }: { params: Promise<{ lang: string
               style={{ width: '100%', height: 'auto' }}
             />
             <div style={{ padding: '1rem' }}>
-              <div style={{ fontWeight: 800 }}>{clinic.brandName}</div>
+              <div style={{ fontWeight: 800 }}>{brandName}</div>
               <div style={{ color: 'var(--muted)' }}>{locale === 'ar' ? clinic.addressAr : clinic.addressEn}</div>
             </div>
           </div>

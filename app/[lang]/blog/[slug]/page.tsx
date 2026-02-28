@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { clinic, locales, type Locale } from '@/lib/i18n'
 import { getAllPostSlugs, getPost } from '@/lib/mdx'
 import Toc from '@/components/Toc'
+import { getDefaultSocialImage, getPublisherLogo, getSiteUrl, toAbsoluteUrl } from '@/lib/seo'
 
 export async function generateStaticParams() {
   const params: { lang: string; slug: string }[] = []
@@ -21,38 +22,53 @@ export async function generateMetadata({
   const locale = (lang === 'ar' ? 'ar' : 'en') as Locale
   const post = await getPost(locale, slug)
   const title = `${post.frontmatter.title} | ${clinic.brandName}`
-  const og = `/api/og?title=${encodeURIComponent(post.frontmatter.title)}&lang=${locale}`
+  const authorName = locale === 'ar' ? clinic.doctorNameAr : `Dr. ${clinic.doctorName}`
+  const siteUrl = getSiteUrl()
+  const image = post.frontmatter.image
+    ? toAbsoluteUrl(post.frontmatter.image)
+    : toAbsoluteUrl(`/api/og?title=${encodeURIComponent(post.frontmatter.title)}&lang=${locale}`)
+  const canonical = `/${locale}/blog/${slug}`
 
   return {
     title,
     description: post.frontmatter.description,
     alternates: {
-      canonical: `/${locale}/blog/${slug}`,
+      canonical,
       languages: {
         en: `/en/blog/${slug}`,
         ar: `/ar/blog/${slug}`,
         'x-default': `/en/blog/${slug}`
       }
     },
+    authors: [{ name: authorName }],
+    publisher: clinic.brandName,
+    category: locale === 'ar' ? 'طب الجلدية' : 'Dermatology',
+    keywords: post.frontmatter.tags,
     openGraph: {
       title,
       description: post.frontmatter.description,
       type: 'article',
-      url: `/${locale}/blog/${slug}`,
+      url: canonical,
+      siteName: clinic.brandName,
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
       images: [
         {
-          url: og,
+          url: image,
           width: 1200,
           height: 630,
           alt: post.frontmatter.title
         }
-      ]
+      ],
+      authors: [authorName],
+      publishedTime: post.frontmatter.date,
+      modifiedTime: post.frontmatter.date,
+      tags: post.frontmatter.tags
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description: post.frontmatter.description,
-      images: [og]
+      images: [image]
     }
   }
 }
@@ -61,7 +77,11 @@ export default async function BlogPost({ params }: { params: Promise<{ lang: str
   const { lang, slug } = await params
   const locale = (lang === 'ar' ? 'ar' : 'en') as Locale
   const post = await getPost(locale, slug)
-  const og = `/api/og?title=${encodeURIComponent(post.frontmatter.title)}&lang=${locale}`
+  const siteUrl = getSiteUrl()
+  const image = post.frontmatter.image
+    ? toAbsoluteUrl(post.frontmatter.image)
+    : toAbsoluteUrl(`/api/og?title=${encodeURIComponent(post.frontmatter.title)}&lang=${locale}`)
+  const authorName = locale === 'ar' ? clinic.doctorNameAr : `Dr. ${clinic.doctorName}`
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -72,16 +92,22 @@ export default async function BlogPost({ params }: { params: Promise<{ lang: str
     dateModified: post.frontmatter.date,
     author: {
       '@type': 'Person',
-      name: `Dr. ${clinic.doctorName}`
+      name: authorName
     },
     publisher: {
       '@type': 'Organization',
-      name: clinic.brandName
+      name: clinic.brandName,
+      logo: {
+        '@type': 'ImageObject',
+        url: getPublisherLogo()
+      }
     },
-    image: [og],
+    image: [image || getDefaultSocialImage()],
+    articleSection: locale === 'ar' ? 'مقالات جلدية' : 'Dermatology Articles',
+    keywords: post.frontmatter.tags,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.drislamelhelou.com'}/${locale}/blog/${slug}`
+      '@id': `${siteUrl}/${locale}/blog/${slug}`
     }
   }
 

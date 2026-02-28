@@ -41,6 +41,24 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       }
     }
   ],
+  eczema: [
+    {
+      slug: 'cutaneous-lymphoma-signs',
+      title: {
+        en: 'Persistent rashes: when a “simple eczema” story deserves a second look',
+        ar: 'الطفح المستمر: متى تحتاج قصة «إكزيما بسيطة» إلى نظرة أعمق؟'
+      }
+    }
+  ],
+  psoriasis: [
+    {
+      slug: 'psoriasis-beyond-skin',
+      title: {
+        en: 'Psoriasis beyond the skin: why long-term control matters',
+        ar: 'الصدفية ليست مجرد جلد: لماذا يهم التحكم طويل المدى؟'
+      }
+    }
+  ],
   'when-to-consult': [
     {
       slug: 'when-to-see-a-dermatologist',
