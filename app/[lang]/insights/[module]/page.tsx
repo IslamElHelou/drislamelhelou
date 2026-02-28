@@ -3,6 +3,7 @@ import type { Locale } from '@/lib/i18n'
 import { isLocale } from '@/lib/i18n'
 import { getInsightModule } from '@/lib/insights/modules'
 import InsightTool from '@/components/InsightTool'
+import { RelatedBlogs } from '@/components/RelatedBlogs'
 import { notFound } from 'next/navigation'
 import { buildLocalizedMetadata } from '@/lib/seo'
 
@@ -38,10 +39,13 @@ export default async function InsightModulePage({
   if (!module) return notFound()
 
   return (
-    <section className="section">
-      <div className="container">
-        <InsightTool locale={locale} moduleSlug={moduleSlug} />
-      </div>
-    </section>
+    <>
+      <section className="section">
+        <div className="container">
+          <InsightTool locale={locale} moduleSlug={moduleSlug} />
+        </div>
+      </section>
+      <RelatedBlogs moduleSlug={moduleSlug} locale={locale} />
+    </>
   )
 }
