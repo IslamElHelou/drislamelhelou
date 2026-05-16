@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, isLocale, type Locale } from '@/lib/i18n'
 import TestimonialsSlider, { type Review } from '@/components/TestimonialsSlider'
-import { getPublisherLogo, getSiteUrl } from '@/lib/seo'
+import { getPublisherLogo, getSiteUrl, withBrandTitle } from '@/lib/seo'
 
 export async function generateMetadata({
   params
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
   return {
-    title: `${t.testimonials.title} • ${clinic.brandName}`,
+    title: withBrandTitle(t.testimonials.title),
     description: t.testimonials.subtitle,
     alternates: {
       canonical: `/${locale}/testimonials`,
@@ -39,18 +39,18 @@ export default async function TestimonialsPage({ params }: { params: Promise<{ l
             name: 'إبراهيم',
             source: 'Google Review',
             body:
-              'كنت أعاني من مشكلة جلدية مزمنة لسنوات طويلة. بعد المتابعة مع د. إسلام تم طلب الفحوصات اللازمة وتغير التشخيص، وبدأ التحسن بشكل واضح خلال فترة قصيرة.'
+              'كنت أعاني من مشكلة جلدية مزمنة لسنوات. بعد المتابعة مع د. إسلام وطلب الفحوصات المناسبة، تم تعديل التشخيص وبدأ التحسن بشكل واضح خلال فترة قصيرة.'
           },
           {
             name: 'علي',
             source: 'Google Review',
             body:
-              'بعد سنوات من زيارة أطباء كثيرين بدون نتيجة، كانت المتابعة هنا سبباً في الوصول للتشخيص الصحيح ووضع خطة علاجية واضحة.'
+              'بعد سنوات من زيارة أطباء كثيرين بدون نتيجة، كانت المتابعة هنا سببًا في الوصول للتشخيص الصحيح ووضع خطة علاجية واضحة.'
           },
           {
             name: 'روضة',
             source: 'Google Review',
-            body: 'دكتور ممتاز ومحترم وخبرة كبيرة.'
+            body: 'دكتور ممتاز ومحترم ولديه خبرة كبيرة.'
           }
         ]
       : [
@@ -117,7 +117,7 @@ export default async function TestimonialsPage({ params }: { params: Promise<{ l
         <h1>{t.testimonials.title}</h1>
         <p>
           {locale === 'ar'
-            ? 'مراجعات منشورة من مرضى عن تجربة الجلدية الطبية وطب التجميل مع د. إسلام الحلو في الإسكندرية.'
+            ? 'مراجعات منشورة من المرضى عن تجربتهم في الجلدية العلاجية وطب التجميل مع د. إسلام الحلو في الإسكندرية.'
             : 'Published patient feedback about medical dermatology and aesthetic care at Dr Islam El Helou Clinic Alexandria.'}
         </p>
       </div>
@@ -130,7 +130,7 @@ export default async function TestimonialsPage({ params }: { params: Promise<{ l
         <div style={{ fontWeight: 800 }}>{locale === 'ar' ? 'هل ترغب في إضافة رأيك؟' : 'Want to leave a review?'}</div>
         <p style={{ color: 'var(--muted)' }}>
           {locale === 'ar'
-            ? 'مراجعاتك تساعد المرضى الآخرين في اتخاذ قرارهم. يمكنك ترك مراجعة على ملف نشاطي التجاري في جوجل.'
+            ? 'رأيك يساعد المرضى الآخرين في اتخاذ قرارهم. يمكنك إضافة مراجعة على ملف العيادة على Google.'
             : 'Your feedback helps other patients. You can leave a review on Google Business Profile.'}
         </p>
         <div style={{ display: 'flex', gap: '.7rem', flexWrap: 'wrap' }}>

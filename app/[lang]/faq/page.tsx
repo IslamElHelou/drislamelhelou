@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { FadeIn } from '@/components/Motion'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, isLocale, type Locale } from '@/lib/i18n'
-import { getSiteUrl } from '@/lib/seo'
+import { getSiteUrl, withBrandTitle } from '@/lib/seo'
 
 export async function generateMetadata({
   params
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
   return {
-    title: `${t.faq.title} • ${clinic.brandName}`,
+    title: withBrandTitle(t.faq.title),
     description: t.faq.subtitle,
     alternates: {
       canonical: `/${locale}/faq`,
@@ -36,12 +36,12 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
     locale === 'ar'
       ? [
           {
-            q: 'هل أحتاج إلى حجز موعد مسبقاً؟',
-            a: 'نعم. الحجز يضمن وقتاً مناسباً وتقليل الانتظار. يمكنك الحجز عبر واتساب أو الاتصال مباشرة.'
+            q: 'هل أحتاج إلى حجز موعد مسبقًا؟',
+            a: 'نعم. الحجز يضمن وقتًا مناسبًا ويقلل فترة الانتظار. يمكنك الحجز عبر واتساب أو الاتصال مباشرة.'
           },
           {
             q: 'هل يمكنني إرسال صور قبل الزيارة؟',
-            a: 'يمكن إرسال صور أو تقارير عبر واتساب للمساعدة في التحضير، لكن التشخيص النهائي غالباً يحتاج فحصاً مباشراً.'
+            a: 'يمكن إرسال صور أو تقارير عبر واتساب للمساعدة في التحضير، لكن التشخيص النهائي غالبًا يحتاج فحصًا مباشرًا.'
           },
           {
             q: 'كم يستغرق العلاج حتى تظهر النتائج؟',
@@ -49,7 +49,7 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
           },
           {
             q: 'هل تتعاملون مع الحالات الصعبة أو غير المشخصة؟',
-            a: 'نعم. نركز على التشخيص الدقيق، وقد نطلب تحاليل أو عينة من الجلد وتحليل باثولوجي عند الحاجة.'
+            a: 'نعم. نركز على التشخيص الدقيق، وقد نطلب تحاليل أو خزعة جلدية وتحليلًا باثولوجيًا عند الحاجة.'
           },
           {
             q: 'هل تقدمون خدمات تجميلية؟',
@@ -132,7 +132,7 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
         <div style={{ fontWeight: 800 }}>{locale === 'ar' ? 'احجز الآن' : 'Book now'}</div>
         <p style={{ color: 'var(--muted)' }}>
           {locale === 'ar'
-            ? `للحجز أو الاستفسار عن خدمات الجلدية والتجميل في عيادة د. إسلام الحلو بالإسكندرية، تواصل عبر واتساب أو اتصل بنا: ${clinic.phoneE164}`
+            ? `للحجز أو الاستفسار عن خدمات الجلدية والتجميل في عيادة د. إسلام الحلو بالإسكندرية، تواصل عبر واتساب أو اتصل بنا على: ${clinic.phoneE164}`
             : `For booking or questions about dermatology and aesthetic services at Dr Islam El Helou Clinic Alexandria, contact us via WhatsApp or call: ${clinic.phoneE164}`}
         </p>
         <div style={{ display: 'flex', gap: '.7rem', flexWrap: 'wrap' }}>

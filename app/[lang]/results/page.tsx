@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FadeIn } from '@/components/Motion'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, isLocale, type Locale } from '@/lib/i18n'
+import { withBrandTitle } from '@/lib/seo'
 
 export async function generateMetadata({
   params
@@ -13,7 +14,7 @@ export async function generateMetadata({
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
   return {
-    title: `${t.results.title} • ${clinic.brandName}`,
+    title: withBrandTitle(t.results.title),
     description: t.results.subtitle,
     alternates: {
       canonical: `/${locale}/results`,

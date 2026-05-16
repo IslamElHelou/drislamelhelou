@@ -136,7 +136,7 @@ const hairLoss: InsightModule = {
   title: { en: 'Hair Loss Insight', ar: 'إرشادات تساقط الشعر' },
   description: {
     en: 'A structured guide to understand common patterns and when evaluation is recommended.',
-    ar: 'دليل منظم لفهم الأنماط الشائعة ومتى يُنصح بالتقييم.'
+    ar: 'دليل منظم لفهم الأنماط الشائعة ومتى يُفضّل التقييم.'
   },
   questions: [
     {
@@ -276,7 +276,7 @@ const pigmentation: InsightModule = {
           score: 6,
           redFlag: {
             en: 'A new or changing pigmented lesion should be assessed clinically.',
-            ar: 'أي بقعة مصطبغة جديدة أو متغيرة يُنصح بتقييمها إكلينيكيًا.'
+            ar: 'أي بقعة مصطبغة جديدة أو متغيرة يُفضّل تقييمها إكلينيكيًا.'
           }
         }
       ]
@@ -377,7 +377,7 @@ const rosacea: InsightModule = {
         ar: 'مثل: الحرارة، الشمس، الأكل الحار، المشروبات الساخنة، التوتر.'
       },
       options: [
-        { id: 'no', label: { en: 'Not clearly', ar: 'ليس بوضوح' }, score: 1 },
+        { id: 'no', label: { en: 'Not clearly', ar: 'ليس بشكل واضح' }, score: 1 },
         { id: 'some', label: { en: 'Sometimes', ar: 'أحيانًا' }, score: 2 },
         { id: 'yes', label: { en: 'Yes, clearly', ar: 'نعم بوضوح' }, score: 3 }
       ]
@@ -672,7 +672,7 @@ const whenToConsult: InsightModule = {
   title: { en: 'When to Consult', ar: 'متى أزور طبيب الجلدية؟' },
   description: {
     en: 'A structured guide to help decide when professional evaluation is recommended.',
-    ar: 'دليل منظم يساعد على تحديد متى يُنصح بزيارة طبيب الجلدية.'
+    ar: 'دليل منظم يساعدك على تحديد متى يُفضّل زيارة طبيب الجلدية.'
   },
   questions: [
     {
@@ -699,7 +699,7 @@ const whenToConsult: InsightModule = {
           score: 8,
           redFlag: {
             en: 'If there is rapid change, bleeding, severe pain, widespread rash, or fever, seek prompt evaluation.',
-            ar: 'عند وجود تغير سريع أو نزف أو ألم شديد أو طفح منتشر أو حرارة، يُنصح بتقييم عاجل.'
+            ar: 'عند وجود تغير سريع أو نزف أو ألم شديد أو طفح منتشر أو حرارة، يُفضّل تقييم عاجل.'
           }
         }
       ]
@@ -748,7 +748,7 @@ const whenToConsult: InsightModule = {
         'Bring photos (if changes fluctuate) and a list of products/medications used.'
       ],
       ar: [
-        'عند وجود تغير سريع أو نزف أو أعراض شديدة، يُنصح بتقييم عاجل.',
+        'عند وجود تغير سريع أو نزف أو أعراض شديدة، يُفضّل تقييم عاجل.',
         'إذا استمرت المشكلة لعدة أسابيع، قد يفيد تقييم منظم لتوضيح التشخيص.',
         'أحضر صورًا (إن كانت الحالة تتغير) وقائمة بالمنتجات/الأدوية المستخدمة.'
       ]
@@ -782,7 +782,7 @@ const skinAging: InsightModule = {
       options: [
         { id: 'consistent', label: { en: 'Consistent use for years', ar: 'استخدام منتظم لسنوات' }, score: 1 },
         { id: 'recent', label: { en: 'Recent, not long-term', ar: 'مؤخرًا، ليس طويل المدى' }, score: 2 },
-        { id: 'minimal', label: { en: 'Minimal or no regular protection', ar: 'حماية بسيطة أو خاطئة' }, score: 4 }
+        { id: 'minimal', label: { en: 'Minimal or no regular protection', ar: 'حماية محدودة أو غير منتظمة' }, score: 4 }
       ]
     },
     {

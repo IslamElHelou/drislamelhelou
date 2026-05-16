@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import type { Locale } from '@/lib/i18n'
-import { clinic, getClinicBrandName } from '@/lib/i18n'
+import { clinic, getClinicBrandName, getWhatsAppBookingHref } from '@/lib/i18n'
 import { getDictionary } from '@/lib/dictionaries'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LanguageToggle } from '@/components/LanguageToggle'
@@ -14,13 +14,29 @@ export function Header({ locale }: { locale: Locale }) {
   const t = getDictionary(locale)
   const base = `/${locale}`
   const brandName = getClinicBrandName(locale)
+  const bookingHref = getWhatsAppBookingHref(locale)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    onScroll()
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      const next = window.scrollY > 8
+      setScrolled((prev) => (prev === next ? prev : next))
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(update)
+    }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
   return (
@@ -79,6 +95,9 @@ export function Header({ locale }: { locale: Locale }) {
 
             <ThemeToggle />
             <LanguageToggle locale={locale} />
+            <a className="btn btnPrimary btnMetallic" href={bookingHref} target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
           </nav>
 
           {/* Mobile */}
@@ -100,6 +119,9 @@ export function Header({ locale }: { locale: Locale }) {
               <>
                 <ThemeToggle />
                 <LanguageToggle locale={locale} />
+                <a className="btn btnPrimary btnMetallic navActionMini" href={bookingHref} target="_blank" rel="noreferrer">
+                  WA
+                </a>
               </>
             }
           />

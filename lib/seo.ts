@@ -1,6 +1,19 @@
 import type { Metadata } from 'next'
 import { clinic, type Locale } from '@/lib/i18n'
 
+export const MAX_SEO_TITLE_LENGTH = 60
+
+export function trimSeoTitle(title: string, maxLength: number = MAX_SEO_TITLE_LENGTH) {
+  const clean = String(title || '').trim()
+  if (!clean) return clinic.brandName
+  if (clean.length <= maxLength) return clean
+  return `${clean.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`
+}
+
+export function withBrandTitle(title: string, maxLength: number = MAX_SEO_TITLE_LENGTH) {
+  return trimSeoTitle(`${title} • ${clinic.brandName}`, maxLength)
+}
+
 type SeoInput = {
   locale: Locale
   path: string
@@ -18,7 +31,7 @@ export function buildLocalizedMetadata({
   type = 'website',
   image = '/images/doctor.webp'
 }: SeoInput): Metadata {
-  const fullTitle = `${title} • ${clinic.brandName}`
+  const fullTitle = withBrandTitle(title)
   const canonical = `/${locale}${path}`
 
   return {
@@ -30,6 +43,17 @@ export function buildLocalizedMetadata({
         en: `/en${path}`,
         ar: `/ar${path}`,
         'x-default': `/en${path}`
+      }
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1
       }
     },
     openGraph: {
@@ -59,7 +83,7 @@ export function buildLocalizedMetadata({
 }
 
 export function getSiteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.drislamelhelou.com'
+  return (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.drislamelhelou.com').replace(/\/$/, '')
 }
 
 export function toAbsoluteUrl(path: string) {

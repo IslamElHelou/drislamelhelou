@@ -27,6 +27,8 @@ export const clinic = {
   whatsappE164: '+201016006000',
   addressEn: '375 El Geish Road, Gleem, Alexandria, Egypt (In front of Gleem Bay)',
   addressAr: '٣٧٥ طريق الجيش، جليم، الإسكندرية، مصر (أمام جليم باي)',
+  hoursEn: 'Sat, Mon, Wed: 2 PM to 5 PM',
+  hoursAr: 'السبت والاثنين والأربعاء: ٢ إلى ٥ مساءً',
   // Exact clinic place from the provided Google Maps share link
   mapEmbedSrc:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3411.252392681939!2d29.957767338497522!3d31.241435660979633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x242445b16a31152b%3A0x13096e424c20071e!2z2LnZitin2K_YqSDYr9mD2KrZiNixLyDYpdiz2YTYp9mFINin2YTYrdmE2Ygg2KfYs9iq2LTYp9ix2Yog2KfZhNin2YXYsdin2LYg2KfZhNis2YTYr9mK2Ycg2Ygg2KfZhNiq2YbYp9iz2YTZitmHINmIINin2YTYqtis2YXZitmE!5e0!3m2!1sen!2seg!4v1772068803705!5m2!1sen!2seg',
@@ -56,4 +58,14 @@ export function getMapEmbedSrc(locale: Locale) {
 
 export function getGoogleMapsDirectionsUrl(locale: Locale) {
   return locale === 'ar' ? clinic.googleMapsDirectionsUrlAr : clinic.googleMapsDirectionsUrl
+}
+
+export function getWhatsAppBookingHref(locale: Locale, treatment?: string) {
+  const number = clinic.whatsappE164.replace('+', '')
+  const message =
+    locale === 'ar'
+      ? `مرحباً د. إسلام، أود الاستفسار عن ${treatment ?? 'العلاج المناسب'} في عيادة جليم.`
+      : `Hello Dr. Islam, I would like to inquire about ${treatment ?? 'a treatment'} at your Gleem clinic.`
+
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`
 }

@@ -8,5 +8,9 @@ export const metadata = {
 
 export default async function DashboardPage() {
   const authed = await isDashboardAuthed()
-  return <DashboardClient authed={authed} />
+  return (
+    <main>
+      <DashboardClient authed={authed} />
+    </main>
+  )
 }

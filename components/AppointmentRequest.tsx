@@ -16,10 +16,10 @@ export default function AppointmentRequest({ locale, condition }: Props) {
 
   const title = isAr ? 'طلب حجز موعد' : 'Request an appointment'
   const subtitle = isAr
-    ? 'نموذج مختصر لتسهيل التواصل وتأكيد الموعد. سيتم التواصل معك لتأكيد التوقيت.'
+    ? 'نموذج مختصر لتسهيل الحجز. سيتم التواصل معك لتأكيد الموعد.'
     : 'A short request to streamline scheduling. Our team will contact you to confirm the time.'
 
-  const defaultPreferred = useMemo(() => (isAr ? 'مساءً (مثال: 6–9)' : 'Evening (e.g., 6–9pm)'), [isAr])
+  const defaultPreferred = useMemo(() => (isAr ? 'مساءً (مثال: 6–9 مساءً)' : 'Evening (e.g., 6–9pm)'), [isAr])
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -46,7 +46,7 @@ export default function AppointmentRequest({ locale, condition }: Props) {
 
       const json = (await res.json().catch(() => null)) as any
       if (!res.ok || !json?.success) {
-        setError(isAr ? 'تعذر إرسال الطلب. حاول مرة أخرى.' : 'Could not send request. Please try again.')
+        setError(isAr ? 'تعذر إرسال الطلب. يرجى المحاولة مرة أخرى.' : 'Could not send request. Please try again.')
         setLoading(false)
         return
       }
@@ -61,7 +61,7 @@ export default function AppointmentRequest({ locale, condition }: Props) {
         window.open(json.whatsappUrl, '_blank', 'noopener,noreferrer')
       }
     } catch {
-      setError(isAr ? 'تعذر إرسال الطلب. حاول مرة أخرى.' : 'Could not send request. Please try again.')
+      setError(isAr ? 'تعذر إرسال الطلب. يرجى المحاولة مرة أخرى.' : 'Could not send request. Please try again.')
       setLoading(false)
     }
   }
@@ -74,7 +74,7 @@ export default function AppointmentRequest({ locale, condition }: Props) {
       {sent ? (
         <div className="leadSuccess" style={{ marginTop: 12 }}>
           {isAr
-            ? 'تم استلام طلبك. سنقوم بالتواصل معك لتأكيد الموعد.'
+            ? 'تم استلام طلبك بنجاح. سنتواصل معك قريبًا لتأكيد الموعد.'
             : 'Your request was received. We will contact you to confirm your appointment.'}
         </div>
       ) : (
@@ -84,7 +84,7 @@ export default function AppointmentRequest({ locale, condition }: Props) {
 
           <div className="leadRow">
             <label className="leadLabel">{isAr ? 'الاسم الكامل' : 'Full name'}</label>
-            <input className="leadInput" name="name" required placeholder={isAr ? 'اكتب الاسم' : 'Enter your name'} />
+            <input className="leadInput" name="name" required placeholder={isAr ? 'اكتب اسمك' : 'Enter your name'} />
           </div>
 
           <div className="leadRow">
@@ -125,7 +125,7 @@ export default function AppointmentRequest({ locale, condition }: Props) {
           {error ? <div className="leadError">{error}</div> : null}
 
           <button className="leadButton" type="submit" disabled={loading}>
-            {loading ? (isAr ? 'جاري الإرسال...' : 'Sending...') : isAr ? 'إرسال الطلب' : 'Send request'}
+            {loading ? (isAr ? 'جارٍ الإرسال...' : 'Sending...') : isAr ? 'إرسال الطلب' : 'Send request'}
           </button>
         </form>
       )}

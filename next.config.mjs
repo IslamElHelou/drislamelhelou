@@ -10,13 +10,14 @@ const withMDX = createMDX({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   images: {
-    formats: ['image/avif', 'image/webp']
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2678400
   },
-  swcMinify: true,
-  compress: true,
-  optimizeFonts: true,
   webpack: (config, { dev, isServer }) => {
     // Prevent unnecessary polyfill bundling for modern ES2022+ code
     config.resolve.fallback = {
@@ -46,6 +47,32 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }
+        ]
+      },
+      // Cache static assets aggressively (1 year)
+      {
+        source: '/images/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, immutable, max-age=31536000' }
+        ]
+      },
+      // Cache fonts (1 year)
+      {
+        source: '/:path*\\.(woff2|woff|ttf|otf)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, immutable, max-age=31536000' }
+        ]
+      },
+      // Cache OG image endpoint (15 minutes)
+      {
+        source: '/api/og',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=900, stale-while-revalidate=3600' }]
+      },
+      // Cache HTML pages (5 minutes, must revalidate)
+      {
+        source: '/(.*)\\.html',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=300, must-revalidate' }
         ]
       }
     ]

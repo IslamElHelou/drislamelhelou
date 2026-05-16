@@ -2,7 +2,34 @@ import type { Metadata } from 'next'
 import { clinic, locales, type Locale } from '@/lib/i18n'
 import { getAllPostSlugs, getPost } from '@/lib/mdx'
 import Toc from '@/components/Toc'
-import { getDefaultSocialImage, getPublisherLogo, getSiteUrl, toAbsoluteUrl } from '@/lib/seo'
+import { getDefaultSocialImage, getPublisherLogo, getSiteUrl, toAbsoluteUrl, withBrandTitle } from '@/lib/seo'
+
+const articleHighlights = {
+  'acne-basics': {
+    recovery: { en: 'Usually gradual over 6 to 12 weeks', ar: 'عادة يكون التحسن تدريجيًا خلال ٦ إلى ١٢ أسبوعًا' },
+    severity: { en: 'Mild to moderate, sometimes scarring', ar: 'خفيف إلى متوسط وقد يسبب ندبات أحيانًا' }
+  },
+  'psoriasis-beyond-skin': {
+    recovery: { en: 'Control is long-term with flare-based adjustments', ar: 'التحكم طويل المدى مع تعديل العلاج حسب شدة النوبات' },
+    severity: { en: 'Moderate to high when extensive or symptomatic', ar: 'متوسطة إلى عالية عند الانتشار أو شدة الأعراض' }
+  },
+  'hair-loss-workup': {
+    recovery: { en: 'Hair response often needs several months', ar: 'استجابة الشعر تحتاج غالبًا عدة أشهر' },
+    severity: { en: 'Variable, depending on shedding pattern and cause', ar: 'متفاوتة حسب نمط التساقط والسبب' }
+  },
+  'pigmentation-melasma-guide': {
+    recovery: { en: 'Gradual fading over weeks to months', ar: 'تفتيح تدريجي خلال أسابيع إلى أشهر' },
+    severity: { en: 'Usually mild medically, high cosmetic impact', ar: 'غالبًا بسيطة طبيًا لكن تأثيرها التجميلي مرتفع' }
+  },
+  'injectable-treatments-guide': {
+    recovery: { en: 'Often same day to a few days', ar: 'غالبًا في نفس اليوم إلى عدة أيام' },
+    severity: { en: 'Elective treatment, low symptom burden', ar: 'علاج اختياري مع عبء أعراض منخفض' }
+  },
+  fallback: {
+    recovery: { en: 'Varies by diagnosis and treatment plan', ar: 'تختلف حسب التشخيص وخطة العلاج' },
+    severity: { en: 'Depends on symptoms, extent, and duration', ar: 'تعتمد على الأعراض والانتشار ومدة الحالة' }
+  }
+} as const
 
 export async function generateStaticParams() {
   const params: { lang: string; slug: string }[] = []
@@ -21,7 +48,7 @@ export async function generateMetadata({
   const { lang, slug } = await params
   const locale = (lang === 'ar' ? 'ar' : 'en') as Locale
   const post = await getPost(locale, slug)
-  const title = `${post.frontmatter.title} | ${clinic.brandName}`
+  const title = withBrandTitle(post.frontmatter.title)
   const authorName = locale === 'ar' ? clinic.doctorNameAr : `Dr. ${clinic.doctorName}`
   const siteUrl = getSiteUrl()
   const image = post.frontmatter.image
@@ -82,6 +109,7 @@ export default async function BlogPost({ params }: { params: Promise<{ lang: str
     ? toAbsoluteUrl(post.frontmatter.image)
     : toAbsoluteUrl(`/api/og?title=${encodeURIComponent(post.frontmatter.title)}&lang=${locale}`)
   const authorName = locale === 'ar' ? clinic.doctorNameAr : `Dr. ${clinic.doctorName}`
+  const highlights = articleHighlights[slug as keyof typeof articleHighlights] ?? articleHighlights.fallback
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -139,8 +167,31 @@ export default async function BlogPost({ params }: { params: Promise<{ lang: str
               </div>
             </header>
 
+            <div className="articleSummaryGrid">
+              <div className="articleSummaryCard articleSummaryNavy">
+                <div className="articleSummaryLabel">{locale === 'ar' ? 'مدة التحسن' : 'Recovery Time'}</div>
+                <div className="articleSummaryValue">{highlights.recovery[locale]}</div>
+              </div>
+              <div className="articleSummaryCard articleSummaryGold">
+                <div className="articleSummaryLabel">{locale === 'ar' ? 'شدة الأعراض' : 'Symptom Severity'}</div>
+                <div className="articleSummaryValue">{highlights.severity[locale]}</div>
+              </div>
+            </div>
+
             <div className="journalContent mdx" style={{ marginTop: '1.2rem' }}>
               {post.content}
+            </div>
+
+            <div className="authoritySignature">
+              <div className="authoritySignatureEyebrow">{locale === 'ar' ? 'مراجعة استشارية' : 'Consultant Verified'}</div>
+              <div className="authoritySignatureName">
+                {locale === 'ar' ? 'د. إسلام الحلو' : 'Dr. Islam El-Helou'}
+              </div>
+              <div className="authoritySignatureMeta">
+                {locale === 'ar'
+                  ? 'PhD, AAD, EADV | استشاري الأمراض الجلدية وطب التجميل'
+                  : 'PhD, AAD, EADV | Consultant Dermatology & Aesthetic Medicine'}
+              </div>
             </div>
           </article>
 

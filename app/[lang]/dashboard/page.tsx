@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { isLocale, type Locale } from '@/lib/i18n'
 import { clinic } from '@/lib/i18n'
 import { getDictionary } from '@/lib/dictionaries'
+import { withBrandTitle } from '@/lib/seo'
 import DashboardClient from './ui'
 
 export async function generateMetadata({
@@ -14,7 +15,7 @@ export async function generateMetadata({
   const locale = (isLocale(lang) ? lang : 'en') as Locale
   const t = getDictionary(locale)
   return {
-    title: `${locale === 'ar' ? 'لوحة التحكم' : 'Dashboard'} • ${clinic.brandName}`,
+    title: withBrandTitle(locale === 'ar' ? 'لوحة التحكم' : 'Dashboard'),
     description: t.dashboard.subtitle,
     robots: { index: false, follow: false },
   }

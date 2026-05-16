@@ -19,7 +19,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'acne-basics',
       title: {
         en: 'When acne is not “just acne”: a structured approach',
-        ar: 'متى لا يكون حبّ الشباب «مجرد حبّ شباب»؟ نهج منظّم'
+        ar: 'حب الشباب: ما الذي يُحسّن الحالة فعلاً؟'
       }
     }
   ],
@@ -28,7 +28,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'hair-loss-workup',
       title: {
         en: 'Hair loss workup: patterns, timelines, and what matters',
-        ar: 'تقييم تساقط الشعر: الأنماط والزمن وما الذي يهم'
+        ar: 'تساقط الشعر عند البالغين: نهج تشخيصي عملي'
       }
     }
   ],
@@ -37,7 +37,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'pigmentation-melasma-guide',
       title: {
         en: 'Pigmentation & melasma: why it recurs and how to manage it',
-        ar: 'التصبغات والكلف: لماذا تعود وكيف نُديرها بشكل صحيح'
+        ar: 'التصبغات والكلف: لماذا تعود وكيف نديرها بشكل صحيح'
       }
     }
   ],
@@ -46,7 +46,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'cutaneous-lymphoma-signs',
       title: {
         en: 'Persistent rashes: when a “simple eczema” story deserves a second look',
-        ar: 'الطفح المستمر: متى تحتاج قصة «إكزيما بسيطة» إلى نظرة أعمق؟'
+        ar: 'هل يمكن أن تكون ليمفوما جلدية؟ علامات تستدعي تقييمًا أدق'
       }
     }
   ],
@@ -55,7 +55,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'psoriasis-beyond-skin',
       title: {
         en: 'Psoriasis beyond the skin: why long-term control matters',
-        ar: 'الصدفية ليست مجرد جلد: لماذا يهم التحكم طويل المدى؟'
+        ar: 'الصدفية أبعد من الجلد: لماذا هي مرض التهابي مزمن؟'
       }
     }
   ],
@@ -64,7 +64,7 @@ export const insightRecommendations: Record<string, InsightRecommendation[]> = {
       slug: 'when-to-see-a-dermatologist',
       title: {
         en: 'When to see a dermatologist: practical signals to not ignore',
-        ar: 'متى يجب زيارة طبيب الجلدية؟ إشارات عملية لا تُهمل'
+        ar: 'متى تزور طبيب الجلدية؟ إشارات عملية لا يجب تجاهلها'
       }
     }
   ]

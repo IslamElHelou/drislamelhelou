@@ -57,12 +57,12 @@ export default function InsightsHubClient({ locale }: { locale: Locale }) {
                     ? `آخر استخدام: ${format(lastAt)}`
                     : `Last used: ${format(lastAt)}`
                   : isAr
-                    ? 'أداة تعليمية منظمة'
+                    ? 'أداة تعليمية تفاعلية'
                     : 'Structured educational tool'}
               </div>
             </div>
             <div className="insightHubDesc">{m.description[locale]}</div>
-            <div className="journalRead">{isAr ? 'ابدأ الآن' : 'Start now'}</div>
+            <div className="journalRead">{isAr ? 'ابدأ التقييم' : 'Start now'}</div>
           </Link>
         )
       })}

@@ -106,7 +106,7 @@ export default function InsightTool({ locale, moduleSlug }: Props) {
 
   const levelLabel = (lvl: string) => {
     if (lvl === 'priority') return isAr ? 'أولوية' : 'Priority'
-    if (lvl === 'evaluation') return isAr ? 'يُفضّل التقييم' : 'Needs evaluation'
+    if (lvl === 'evaluation') return isAr ? 'يفضّل التقييم' : 'Needs evaluation'
     return isAr ? 'إرشادي' : 'Informational'
   }
 
@@ -231,7 +231,7 @@ export default function InsightTool({ locale, moduleSlug }: Props) {
 
               <div className="insightActions" style={{ marginTop: 16 }}>
                 <button type="button" className="btnSecondary" onClick={reset}>
-                  {isAr ? 'إعادة' : 'Start again'}
+                  {isAr ? 'إعادة التقييم' : 'Start again'}
                 </button>
 
                 <button type="button" className="btnTertiary" onClick={onSave}>
@@ -252,7 +252,7 @@ export default function InsightTool({ locale, moduleSlug }: Props) {
                 </a>
 
                 <Link className="btnTertiary" href={`/${locale}/insights`}>
-                  {isAr ? 'العودة لمركز الإرشادات' : 'Back to Insights center'}
+                  {isAr ? 'العودة إلى مركز الإرشادات' : 'Back to Insights center'}
                 </Link>
               </div>
 

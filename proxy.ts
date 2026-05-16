@@ -49,13 +49,13 @@ export function proxy(req: NextRequest) {
     // Use redirect (not rewrite) so the visible URL includes the locale.
     // This improves SEO/canonical URLs and fixes client-side language switching
     // that depends on the pathname starting with /{locale}.
-    const res = NextResponse.redirect(url)
+    const res = NextResponse.redirect(url, 308)
     res.cookies.set('lang', locale, { path: '/', maxAge: 60 * 60 * 24 * 365 })
     return res
   }
 
   url.pathname = `/${locale}${pathname}`
-  const res = NextResponse.redirect(url)
+  const res = NextResponse.redirect(url, 308)
   res.cookies.set('lang', locale, { path: '/', maxAge: 60 * 60 * 24 * 365 })
   return res
 }

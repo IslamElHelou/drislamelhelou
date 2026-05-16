@@ -35,14 +35,14 @@ export default function InsightsPreview({ locale }: { locale: Locale }) {
         slug: "acne",
         title: isAr ? "إرشادات حب الشباب" : "Acne Insight",
         desc: isAr
-          ? "فهم النمط وخطوات عملية قبل الاستشارة."
+          ? "فهم نمط الحالة وخطوات عملية قبل الاستشارة."
           : "Understand patterns and next steps before a consultation.",
       },
       {
         slug: "hair-loss",
         title: isAr ? "إرشادات تساقط الشعر" : "Hair Loss Insight",
         desc: isAr
-          ? "أسئلة منظمة لتحديد الاتجاه الصحيح للتقييم."
+          ? "أسئلة منظمة تساعد على تحديد الاتجاه الأنسب للتقييم."
           : "Structured questions to guide the right evaluation pathway.",
       },
       {
@@ -75,9 +75,9 @@ export default function InsightsPreview({ locale }: { locale: Locale }) {
       },
       {
         slug: "when-to-consult",
-        title: isAr ? "متى تحتاج طبيب جلدية" : "When to Consult",
+        title: isAr ? "متى تحتاج زيارة طبيب جلدية؟" : "When to Consult",
         desc: isAr
-          ? "إشارات تستدعي تقييمًا مبكرًا وطمأنة عند الحاجة."
+          ? "إشارات تستدعي تقييمًا مبكرًا مع طمأنة عند الحاجة."
           : "Red flags that need earlier review, and reassurance when appropriate.",
       },
     ],
@@ -114,7 +114,7 @@ export default function InsightsPreview({ locale }: { locale: Locale }) {
             </h2>
             <div className="muted" style={{ marginTop: ".25rem" }}>
               {isAr
-                ? "أدوات تعليمية منظمة — تساعدك على فهم الأنماط قبل الاستشارة."
+                ? "أدوات تعليمية منظمة تساعدك على فهم الأنماط قبل الاستشارة."
                 : "Structured educational tools — understand patterns before consultation."}
             </div>
             {lastRun ? (
@@ -178,7 +178,7 @@ export default function InsightsPreview({ locale }: { locale: Locale }) {
 
         <div className="muted" style={{ marginTop: ".85rem", fontSize: ".92rem" }}>
           {isAr
-            ? "تنبيه: هذه الأدوات للتثقيف ولا تُعد تشخيصًا أو بديلًا عن الكشف الطبي."
+            ? "تنبيه: هذه الأدوات للتثقيف فقط ولا تُعد تشخيصًا أو بديلًا عن الكشف الطبي."
             : "Note: These tools are educational and do not provide a diagnosis or replace clinical consultation."}
         </div>
       </div>
