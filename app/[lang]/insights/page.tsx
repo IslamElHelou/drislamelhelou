@@ -17,10 +17,10 @@ export async function generateMetadata({
   return buildLocalizedMetadata({
     locale,
     path: '/insights',
-    title: locale === 'ar' ? 'مركز الإرشادات الجلدية التفاعلية' : 'Dermatology Insight Center',
+    title: locale === 'ar' ? 'مركز الإرشادات التفاعلية في طب الجلدية' : 'Dermatology Insight Center',
     description:
       locale === 'ar'
-        ? 'أدوات تفاعلية تعليمية لفهم حب الشباب، تساقط الشعر، التصبغات، الوردية، الإكزيما، الصدفية، ومتى تحتاج إلى تقييم جلدي.'
+        ? 'أدوات تفاعلية تعليمية لفهم حب الشباب، تساقط الشعر، التصبغات، الوردية، الإكزيما، والصدفية، ومتى يكون التقييم الطبي مطلوبًا.'
         : 'Interactive educational tools to understand acne, hair loss, pigmentation, rosacea, eczema, psoriasis, and when dermatology review is useful.'
   })
 }
@@ -35,11 +35,11 @@ export default async function InsightsPage({ params }: { params: Promise<{ lang:
       <div className="container">
         <div className="journalHeader">
           <div className="journalKicker">{locale === 'ar' ? 'مركز الإرشادات' : 'Insight Center'}</div>
-          <h1 className="journalTitle">{locale === 'ar' ? 'إرشادات تفاعلية في طب الجلدية' : 'Dermatology Insight Center'}</h1>
+          <h1 className="journalTitle">{locale === 'ar' ? 'مركز الإرشادات التفاعلية في طب الجلدية' : 'Dermatology Insight Center'}</h1>
           <div className="goldLine" aria-hidden />
           <p className="journalLead">
             {locale === 'ar'
-              ? 'أدوات تعليمية منظمة تساعدك على فهم النمط العام للحالة ومتى يكون التقييم الطبي مفيدًا. بدون تشخيص أو وصفات.'
+              ? 'أدوات تعليمية منظمة تساعدك على فهم النمط العام للحالة ومتى يكون التقييم الطبي مفيدًا، بدون تشخيص مباشر أو وصفات علاجية.'
               : 'Structured educational tools to understand common patterns and when a medical review is helpful — without diagnosis or prescriptions.'}
           </p>
         </div>
@@ -51,7 +51,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ lang:
 
         <div className="insightNote" style={{ marginTop: 18 }}>
           {locale === 'ar'
-            ? 'هذه الأدوات تعليمية ولا تُعد تشخيصًا. التشخيص يتطلب تقييمًا إكلينيكيًا.'
+            ? 'هذه الأدوات للتثقيف فقط ولا تُعد تشخيصًا. التشخيص يحتاج تقييمًا إكلينيكيًا مباشرًا.'
             : 'These tools are educational and not a diagnosis. Diagnosis requires clinical evaluation.'}
         </div>
 

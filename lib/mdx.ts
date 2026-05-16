@@ -27,6 +27,10 @@ function getLocaleDir(locale: Locale) {
   return path.join(CONTENT_ROOT, locale)
 }
 
+function getPostFilePath(locale: Locale, slug: string) {
+  return path.join(getLocaleDir(locale), `${slug}.mdx`)
+}
+
 export function getAllPostSlugs(locale: Locale) {
   const dir = getLocaleDir(locale)
   if (!fs.existsSync(dir)) return []
@@ -40,7 +44,7 @@ export function getAllPosts(locale: Locale) {
   const slugs = getAllPostSlugs(locale)
   const posts = slugs
     .map((slug) => {
-      const file = path.join(getLocaleDir(locale), `${slug}.mdx`)
+      const file = getPostFilePath(locale, slug)
       const raw = fs.readFileSync(file, 'utf8')
       const { data } = matter(raw)
       return { slug, ...(data as BlogFrontmatter) }
@@ -50,8 +54,12 @@ export function getAllPosts(locale: Locale) {
   return posts
 }
 
+export function getPostLastModified(locale: Locale, slug: string) {
+  return fs.statSync(getPostFilePath(locale, slug)).mtime
+}
+
 export async function getPost(locale: Locale, slug: string) {
-  const file = path.join(getLocaleDir(locale), `${slug}.mdx`)
+  const file = getPostFilePath(locale, slug)
   const raw = fs.readFileSync(file, 'utf8')
   const { content, data } = matter(raw)
 

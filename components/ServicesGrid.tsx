@@ -1,113 +1,147 @@
-"use client";
-
+import Link from 'next/link'
 import {
   IconAcne,
+  IconAesthetic,
   IconHair,
   IconPigmentation,
-  IconScreening,
-  IconPediatrics,
-  IconAesthetic,
-} from "@/components/icons/services";
+  IconScreening
+} from '@/components/icons/services'
 
-type Locale = "en" | "ar";
+type Locale = 'en' | 'ar'
 
-const services = [
-  {
-    key: "acne",
-    Icon: IconAcne,
+const content = {
+  hero: {
     en: {
-      title: "Acne & Chronic Skin Conditions",
-      desc: "Structured assessment and long-term management for stable outcomes.",
+      eyebrow: 'Medical Dermatology',
+      title: 'Psoriasis, acne, eczema, and chronic skin disease management',
+      desc: 'Diagnosis-first care plans with staged follow-up for stable, realistic outcomes.'
     },
     ar: {
-      title: "حب الشباب والأمراض الجلدية المزمنة",
-      desc: "تقييم منظّم وخطة علاج طويلة المدى للوصول لنتائج مستقرة.",
-    },
+      eyebrow: 'الجلدية العلاجية',
+      title: 'الصدفية وحب الشباب والإكزيما ومتابعة الأمراض الجلدية المزمنة',
+      desc: 'خطة علاج تبدأ بالتشخيص ثم متابعة مرحلية للوصول إلى نتائج مستقرة وواقعية.'
+    }
   },
-  {
-    key: "hair",
-    Icon: IconHair,
+  aesthetic: {
     en: {
-      title: "Hair & Scalp Disorders",
-      desc: "Evidence-based evaluation to identify cause and guide treatment.",
+      title: 'Aesthetic Medicine',
+      desc: 'Injectables, rejuvenation plans, and subtle enhancement within a medical framework.'
     },
     ar: {
-      title: "مشكلات الشعر وفروة الرأس",
-      desc: "تقييم علمي لتحديد السبب ووضع خطة علاج مناسبة.",
-    },
+      title: 'طب التجميل',
+      desc: 'الحقن التجميلي وخطط النضارة والتحسين الطبيعي ضمن إطار طبي منظم.'
+    }
   },
-  {
-    key: "pigmentation",
-    Icon: IconPigmentation,
+  laser: {
     en: {
-      title: "Pigmentation & Melasma",
-      desc: "Diagnosis-driven plans tailored to skin type and lifestyle.",
+      title: 'Laser & Procedures',
+      desc: 'Targeted technology for pigmentation, texture, scars, and selected resurfacing indications.'
     },
     ar: {
-      title: "التصبغات والكلف",
-      desc: "خطة علاج مبنية على التشخيص ومناسبة لنوع البشرة ونمط الحياة.",
-    },
+      title: 'الليزر والإجراءات',
+      desc: 'تقنيات موجهة للتصبغات وملمس الجلد والندبات وبعض الحالات التي تستفيد من إعادة التسطيح.'
+    }
   },
-  {
-    key: "screening",
-    Icon: IconScreening,
+  hair: {
     en: {
-      title: "Skin Cancer Screening",
-      desc: "Focused evaluation for early detection and reassurance.",
+      title: 'Hair & Scalp',
+      desc: 'Evidence-based workup for shedding, thinning, and inflammatory scalp disease.'
     },
     ar: {
-      title: "فحص الجلد للكشف المبكر عن السرطان",
-      desc: "تقييم دقيق للكشف المبكر وطمأنة المريض.",
-    },
+      title: 'الشعر وفروة الرأس',
+      desc: 'تقييم علمي للتساقط والترقق والتهابات فروة الرأس.'
+    }
   },
-  {
-    key: "peds",
-    Icon: IconPediatrics,
+  prevention: {
     en: {
-      title: "Dermatology for Children & Adults",
-      desc: "Calm, structured care adapted to each age and condition.",
+      title: 'Skin Checks',
+      desc: 'Focused lesion review, dermoscopy, and earlier biopsy planning when required.'
     },
     ar: {
-      title: "أمراض الجلد للأطفال والبالغين",
-      desc: "رعاية هادئة ومنظّمة تناسب العمر والحالة.",
-    },
+      title: 'فحص الجلد',
+      desc: 'فحص دقيق للشامات والآفات الجلدية مع الدرموسكوب والتخطيط للعينة عند الحاجة.'
+    }
   },
-  {
-    key: "aesthetic",
-    Icon: IconAesthetic,
+  cta: {
     en: {
-      title: "Refined Aesthetic Dermatology",
-      desc: "Natural results within a medical framework — only when appropriate.",
+      title: 'Book Appointment',
+      href: '/en/contact'
     },
     ar: {
-      title: "الجلدية التجميلية بشكل راقٍ",
-      desc: "نتائج طبيعية ضمن إطار طبي — عند الحاجة فقط.",
-    },
-  },
-] as const;
+      title: 'احجز موعدك',
+      href: '/ar/contact'
+    }
+  }
+} as const
 
 export function ServicesGrid({ locale }: { locale: Locale }) {
-  const isAr = locale === "ar";
+  const isAr = locale === 'ar'
+  const c = {
+    hero: content.hero[locale],
+    aesthetic: content.aesthetic[locale],
+    laser: content.laser[locale],
+    hair: content.hair[locale],
+    prevention: content.prevention[locale],
+    cta: content.cta[locale]
+  }
 
   return (
-    <div dir={isAr ? "rtl" : "ltr"} className="servicesGrid">
-      {services.map(({ key, Icon, en, ar }) => {
-        const c = isAr ? ar : en;
-        return (
-          <div key={key} className="serviceCard">
-            <div className="serviceTop">
-              <div className="serviceIcon">
-                <Icon size={28} />
-              </div>
-              <div className="serviceText">
-                <div className="serviceTitle">{c.title}</div>
-                <div className="serviceDesc">{c.desc}</div>
-                <div className="serviceLine" aria-hidden />
-              </div>
-            </div>
-          </div>
-        );
-      })}
+    <div dir={isAr ? 'rtl' : 'ltr'} className="servicesBento">
+      <article className="serviceBentoCard serviceBentoHero">
+        <div className="serviceBentoOverlay" aria-hidden />
+        <div className="serviceBentoIcon">
+          <IconAcne size={42} />
+        </div>
+        <div className="serviceType">{c.hero.eyebrow}</div>
+        <h3 className="serviceBentoTitle">{c.hero.title}</h3>
+        <p className="serviceDesc">{c.hero.desc}</p>
+        <div className="serviceBentoInline">
+          <span className="serviceChip">
+            <IconPigmentation size={18} />
+            {isAr ? 'تصبغات' : 'Pigmentation'}
+          </span>
+          <span className="serviceChip">
+            <IconHair size={18} />
+            {isAr ? 'شعر' : 'Hair'}
+          </span>
+        </div>
+      </article>
+
+      <article className="serviceBentoCard serviceBentoGlass">
+        <div className="serviceBentoIcon">
+          <IconAesthetic size={34} />
+        </div>
+        <h3 className="serviceBentoTitle">{c.aesthetic.title}</h3>
+        <p className="serviceDesc">{c.aesthetic.desc}</p>
+      </article>
+
+      <article className="serviceBentoCard serviceBentoGlass">
+        <div className="serviceBentoIcon">
+          <IconHair size={34} />
+        </div>
+        <h3 className="serviceBentoTitle">{c.hair.title}</h3>
+        <p className="serviceDesc">{c.hair.desc}</p>
+      </article>
+
+      <article className="serviceBentoCard serviceBentoSilver">
+        <div className="serviceBentoIcon">
+          <IconScreening size={34} />
+        </div>
+        <h3 className="serviceBentoTitle">{c.prevention.title}</h3>
+        <p className="serviceDesc">{c.prevention.desc}</p>
+      </article>
+
+      <article className="serviceBentoCard serviceBentoSilver">
+        <div className="serviceBentoIcon">
+          <IconPigmentation size={34} />
+        </div>
+        <h3 className="serviceBentoTitle">{c.laser.title}</h3>
+        <p className="serviceDesc">{c.laser.desc}</p>
+      </article>
+
+      <Link href={c.cta.href} className="serviceBentoCard serviceBentoCta">
+        <span>{c.cta.title}</span>
+      </Link>
     </div>
-  );
+  )
 }

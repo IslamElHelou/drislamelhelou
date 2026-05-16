@@ -1,8 +1,8 @@
-import { clinic } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
+import { getWhatsAppBookingHref } from '@/lib/i18n'
 
-export function WhatsAppButton({ label }: { label: string }) {
-  const number = clinic.whatsappE164.replace('+', '')
-  const href = `https://wa.me/${number}?text=${encodeURIComponent('Hello, I would like to book an appointment.')}`
+export function WhatsAppButton({ label, locale }: { label: string; locale: Locale }) {
+  const href = getWhatsAppBookingHref(locale)
 
   return (
     <div className="whatsapp">

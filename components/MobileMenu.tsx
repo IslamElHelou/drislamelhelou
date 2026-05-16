@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Locale } from '@/lib/i18n'
-import { clinic, getClinicBrandName } from '@/lib/i18n'
+import { clinic, getClinicBrandName, getWhatsAppBookingHref } from '@/lib/i18n'
 
 type Labels = {
   home: string
@@ -33,6 +33,7 @@ export default function MobileMenu({
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const brandName = getClinicBrandName(locale)
+  const bookingHref = getWhatsAppBookingHref(locale)
 
   useEffect(() => {
     setMounted(true)
@@ -49,29 +50,21 @@ export default function MobileMenu({
   useEffect(() => {
     if (!open) return
 
-    const scrollY = window.scrollY
     const htmlStyle = document.documentElement.style
     const bodyStyle = document.body.style
 
     const prevHtmlOverflow = htmlStyle.overflow
     const prevBodyOverflow = bodyStyle.overflow
-    const prevBodyPosition = bodyStyle.position
-    const prevBodyTop = bodyStyle.top
-    const prevBodyWidth = bodyStyle.width
+    const prevBodyTouchAction = bodyStyle.touchAction
 
     htmlStyle.overflow = 'hidden'
     bodyStyle.overflow = 'hidden'
-    bodyStyle.position = 'fixed'
-    bodyStyle.top = `-${scrollY}px`
-    bodyStyle.width = '100%'
+    bodyStyle.touchAction = 'none'
 
     return () => {
       htmlStyle.overflow = prevHtmlOverflow
       bodyStyle.overflow = prevBodyOverflow
-      bodyStyle.position = prevBodyPosition
-      bodyStyle.top = prevBodyTop
-      bodyStyle.width = prevBodyWidth
-      window.scrollTo(0, scrollY)
+      bodyStyle.touchAction = prevBodyTouchAction
     }
   }, [open])
 
@@ -133,10 +126,10 @@ export default function MobileMenu({
               />
               <motion.aside
                 className="mobileSheet"
-                initial={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
-                animate={{ x: 0, opacity: 1, scale: 1 }}
-                exit={{ x: locale === 'ar' ? -20 : 20, opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.18 }}
+                initial={{ x: locale === 'ar' ? -16 : 16, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: locale === 'ar' ? -16 : 16, opacity: 0 }}
+                transition={{ duration: 0.14 }}
               >
                 <div className="mobileSheetTop">
                   <div>
@@ -164,6 +157,9 @@ export default function MobileMenu({
                 </nav>
 
                 <div className="mobileSocial">
+                  <a href={bookingHref} target="_blank" rel="noreferrer" className="mobileSocialBtn mobileSocialBtnGold">
+                    WhatsApp
+                  </a>
                   <a href={clinic.facebookUrl} target="_blank" rel="noreferrer" className="mobileSocialBtn">
                     Facebook
                   </a>

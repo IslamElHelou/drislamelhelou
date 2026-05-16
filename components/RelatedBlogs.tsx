@@ -24,13 +24,13 @@ const relatedBlogsByModule: Record<string, Record<'en' | 'ar', RelatedBlog[]>> =
     ar: [
       {
         slug: 'anti-aging-skincare',
-        title: 'العناية بالبشرة المضادة للشيخوخة: الوقاية والتصحيح',
-        description: 'أساليب مبنية على الأدلة العلمية مع جداول زمنية واقعية للحماية من الشمس والريتينويدات والعلاجات الاحترافية.'
+        title: 'العناية المضادة لشيخوخة الجلد: الوقاية والتصحيح',
+        description: 'نهج مبني على الأدلة للتعامل مع الخطوط الدقيقة وفقدان المرونة وتغيرات نسيج البشرة.'
       },
       {
         slug: 'injectable-treatments-guide',
-        title: 'دليل العلاجات القابلة للحقن والليزر: ماذا تتوقعين',
-        description: 'دليل عملي لإجراءات تجميلية—كيفية عملها، النتائج الواقعية، والأسئلة المهمة المطلوب طرحها.'
+        title: 'دليل الحقن التجميلي والليزر: ماذا تتوقعين؟',
+        description: 'شرح عملي للبوتوكس®، ديسبورت®، الفيلر والليزر: آلية العمل، النتائج الواقعية، وفترة التعافي.'
       }
     ]
   },
@@ -50,13 +50,13 @@ const relatedBlogsByModule: Record<string, Record<'en' | 'ar', RelatedBlog[]>> =
     ar: [
       {
         slug: 'anti-aging-skincare',
-        title: 'العناية بالبشرة المضادة للشيخوخة: الوقاية والتصحيح',
-        description: 'أساليب مبنية على الأدلة العلمية مع جداول زمنية واقعية للحماية من الشمس والريتينويدات والعلاجات الاحترافية.'
+        title: 'العناية المضادة لشيخوخة الجلد: الوقاية والتصحيح',
+        description: 'نهج مبني على الأدلة للتعامل مع الخطوط الدقيقة وفقدان المرونة وتغيرات نسيج البشرة.'
       },
       {
         slug: 'injectable-treatments-guide',
-        title: 'دليل العلاجات القابلة للحقن والليزر: ماذا تتوقعين',
-        description: 'دليل عملي لإجراءات تجميلية—كيفية عملها، النتائج الواقعية، والأسئلة المهمة المطلوب طرحها.'
+        title: 'دليل الحقن التجميلي والليزر: ماذا تتوقعين؟',
+        description: 'شرح عملي للبوتوكس®، ديسبورت®، الفيلر والليزر: آلية العمل، النتائج الواقعية، وفترة التعافي.'
       }
     ]
   },
@@ -71,8 +71,8 @@ const relatedBlogsByModule: Record<string, Record<'en' | 'ar', RelatedBlog[]>> =
     ar: [
       {
         slug: 'acne-basics',
-        title: 'حب الشباب: ما الذي يساعد (وما عادة لا يساعد)',
-        description: 'دليل عملي لعلاج حب الشباب: الجداول الزمنية والأخطاء الشائعة ومتى تزور طبيب الجلدية.'
+        title: 'حب الشباب: ما الذي يُحسّن الحالة فعلاً؟',
+        description: 'دليل عملي مبني على الأدلة لعلاج حب الشباب: المدة المتوقعة، الأخطاء الشائعة، ومتى تحتاج مراجعة طبيب الجلدية.'
       }
     ]
   }
@@ -90,7 +90,7 @@ export function RelatedBlogs({ moduleSlug, locale }: { moduleSlug: string; local
     },
     ar: {
       title: 'منشورات مدونة ذات صلة',
-      explore: 'اقرأ المقالة'
+      explore: 'اقرأ المقال'
     }
   }
 
@@ -117,16 +117,6 @@ export function RelatedBlogs({ moduleSlug, locale }: { moduleSlug: string; local
                   cursor: 'pointer',
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   textDecoration: 'none'
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.transform = 'translateY(-2px)'
-                  el.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.1)'
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.transform = 'translateY(0)'
-                  el.style.boxShadow = ''
                 }}
               >
                 <h3 style={{ marginBottom: '0.75rem', fontSize: '1.1rem' }}>{blog.title}</h3>

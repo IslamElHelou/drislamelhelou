@@ -40,7 +40,7 @@ export default function LeadCapture({ locale, condition, level }: Props) {
 
       if (!res.ok) {
         const j = await res.json().catch(() => null)
-        setError(j?.error || (isAr ? 'تعذر الإرسال. حاول مرة أخرى.' : 'Unable to send. Please try again.'))
+        setError(j?.error || (isAr ? 'تعذر الإرسال. يرجى المحاولة مرة أخرى.' : 'Unable to send. Please try again.'))
         setLoading(false)
         return
       }
@@ -48,7 +48,7 @@ export default function LeadCapture({ locale, condition, level }: Props) {
       setOk(true)
       setLoading(false)
     } catch {
-      setError(isAr ? 'تعذر الإرسال. حاول مرة أخرى.' : 'Unable to send. Please try again.')
+      setError(isAr ? 'تعذر الإرسال. يرجى المحاولة مرة أخرى.' : 'Unable to send. Please try again.')
       setLoading(false)
     }
   }
@@ -75,7 +75,7 @@ export default function LeadCapture({ locale, condition, level }: Props) {
       <div className="goldLine" aria-hidden />
       <p className="leadDesc">
         {isAr
-          ? 'إذا رغبت، يمكنك طلب ملخص تعليمي مختصر وإرشادات متابعة بشكل خاص. (دون أي رسائل دعائية)'
+          ? 'يمكنك طلب ملخص تعليمي مختصر وإرشادات متابعة بشكل خاص (بدون رسائل دعائية).'
           : 'If you wish, you may request a brief educational summary and follow-up guidance privately. (No promotional messages)'}
       </p>
 
@@ -121,7 +121,7 @@ export default function LeadCapture({ locale, condition, level }: Props) {
 
         <div className="leadActions">
           <button type="submit" className="btnPrimary" disabled={loading}>
-            {loading ? (isAr ? 'جاري الإرسال...' : 'Sending...') : isAr ? 'طلب الملخص' : 'Request summary'}
+            {loading ? (isAr ? 'جارٍ الإرسال...' : 'Sending...') : isAr ? 'طلب الملخص' : 'Request summary'}
           </button>
         </div>
       </form>

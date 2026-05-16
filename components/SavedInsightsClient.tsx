@@ -21,7 +21,7 @@ function format(locale: Locale, ms: number) {
 function levelLabel(locale: Locale, lvl: SavedInsight['level']) {
   const isAr = locale === 'ar'
   if (lvl === 'priority') return isAr ? 'أولوية' : 'Priority'
-  if (lvl === 'evaluation') return isAr ? 'يُفضّل التقييم' : 'Needs evaluation'
+  if (lvl === 'evaluation') return isAr ? 'يفضّل التقييم' : 'Needs evaluation'
   return isAr ? 'إرشادي' : 'Informational'
 }
 
@@ -62,7 +62,7 @@ export default function SavedInsightsClient({ locale }: { locale: Locale }) {
 
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 4 }}>
                 <Link className="journalRead" href={`/${locale}/insights/${it.module}`}>
-                  {isAr ? 'فتح الأداة' : 'Open tool'}
+                  {isAr ? 'فتح التقييم' : 'Open tool'}
                 </Link>
                 <button
                   type="button"

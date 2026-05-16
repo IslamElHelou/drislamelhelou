@@ -69,10 +69,10 @@ export async function POST(req: Request) {
 
         const safe = (s: string) =>
           s
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
 
         const html = `
           <div style="font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; line-height: 1.5;">
@@ -115,7 +115,7 @@ export async function POST(req: Request) {
     }
 
     const msg = locale === 'ar'
-      ? `مرحبًا، أرسلت طلب حجز موعد عبر موقع العيادة.\nالاسم: ${name}\nالحالة: ${condition || 'جلدية عامة'}\nالوقت المفضل: ${preferred}\nرقم الهاتف: ${phone}`
+      ? `مرحبًا، تم إرسال طلب حجز موعد عبر موقع العيادة.\nالاسم: ${name}\nنوع الاستشارة: ${condition || 'جلدية عامة'}\nالوقت المفضل: ${preferred}\nرقم الهاتف: ${phone}`
       : `Hello, I submitted an appointment request from the clinic website.\nName: ${name}\nCondition: ${condition || 'General dermatology'}\nPreferred time: ${preferred}\nPhone: ${phone}`
 
     const whatsappUrl = `https://wa.me/${clinic.whatsappE164.replace('+', '')}?text=${encodeURIComponent(msg)}`

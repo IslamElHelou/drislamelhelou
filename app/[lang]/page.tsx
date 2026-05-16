@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FadeIn } from '@/components/Motion'
+import DeferredMapEmbed from '@/components/DeferredMapEmbed'
 import HeroPortrait from '@/components/HeroPortrait'
 import InsightsPreview from '@/components/InsightsPreview'
+import { ServicesGrid } from '@/components/ServicesGrid'
 import { getDictionary } from '@/lib/dictionaries'
 import { clinic, getClinicBrandName, getGoogleMapsDirectionsUrl, getMapEmbedSrc, isLocale, type Locale } from '@/lib/i18n'
 import { getAllPosts } from '@/lib/mdx'
@@ -36,9 +38,75 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const mapDirectionsUrl = getGoogleMapsDirectionsUrl(locale)
   const mapEmbedSrc = getMapEmbedSrc(locale)
   const serviceLocationPages = getAllServiceLocationPages()
+  const roadmapSteps =
+    locale === 'ar'
+      ? [
+          {
+            title: 'التشخيص',
+            body: 'نبدأ بتاريخ مرضي دقيق، فحص جلدي منظم، وتحديد المحفزات والعوامل المصاحبة.'
+          },
+          {
+            title: 'الاستقرار',
+            body: 'يتم ضبط العلاج ومتابعة الاستجابة تدريجيًا حتى تهدأ النوبات وتصبح الخطة قابلة للاستمرار.'
+          },
+          {
+            title: 'جلد أوضح',
+            body: 'الهدف هو تحسن واضح وثابت مع توقعات واقعية ومراجعات عند الحاجة.'
+          }
+        ]
+      : [
+          {
+            title: 'Diagnosis',
+            body: 'We start with structured history-taking, skin examination, and trigger identification.'
+          },
+          {
+            title: 'Stabilization',
+            body: 'Treatment is adjusted in stages until flares are controlled and the plan becomes sustainable.'
+          },
+          {
+            title: 'Clearer Skin',
+            body: 'The goal is visible, steady improvement with realistic expectations and timely review.'
+          }
+        ]
 
   const address = locale === 'ar' ? clinic.addressAr : clinic.addressEn
   const posts = getAllPosts(locale).slice(0, 3)
+  const photoGallery =
+    locale === 'ar'
+      ? [
+          {
+            src: '/images/doctor.webp',
+            alt: 'د. إسلام الحلو داخل العيادة في الإسكندرية',
+            caption: 'د. إسلام الحلو - استشاري الأمراض الجلدية'
+          },
+          {
+            src: '/clinic/waiting-room.webp',
+            alt: 'منطقة انتظار العيادة في الإسكندرية',
+            caption: 'بيئة عيادة هادئة ومنظمة'
+          },
+          {
+            src: '/brand/logo.png',
+            alt: 'شعار عيادة د. إسلام الحلو',
+            caption: 'الهوية البصرية للعيادة'
+          }
+        ]
+      : [
+          {
+            src: '/images/doctor.webp',
+            alt: 'Dr Islam El Helou at the dermatology clinic in Alexandria',
+            caption: 'Dr Islam El Helou - Consultant Dermatologist'
+          },
+          {
+            src: '/clinic/waiting-room.webp',
+            alt: 'Clinic waiting room in Alexandria',
+            caption: 'Calm and organized clinic environment'
+          },
+          {
+            src: '/brand/logo.png',
+            alt: 'Dr Islam El Helou Clinic brand logo',
+            caption: 'Clinic visual identity'
+          }
+        ]
 
   // Curated 5★ “Google” reviews (placeholders). Replace with real text from Google Business.
   const reviews =
@@ -96,7 +164,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 </p>
                 <p className="muted" style={{ marginTop: '.65rem', maxWidth: '70ch' }}>
                   {locale === 'ar'
-                    ? 'عيادة د. إسلام الحلو بالإسكندرية تقدم تشخيصًا منظمًا لحب الشباب، تساقط الشعر، التصبغات، الإكزيما، الصدفية، والإجراءات الجلدية عند الحاجة.'
+                    ? 'عيادة د. إسلام الحلو بالإسكندرية تقدم تشخيصًا منظمًا لحب الشباب، تساقط الشعر، التصبغات، الإكزيما، والصدفية، مع إجراءات جلدية عند الحاجة.'
                     : 'Dr Islam El Helou Clinic Alexandria offers structured diagnosis for acne, hair loss, pigmentation, eczema, psoriasis, and skin procedures when needed.'}
                 </p>
 
@@ -128,7 +196,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <div className="kpis">
                   <span className="badge">{locale === 'ar' ? 'خبرة +20 سنة' : '20+ years experience'}</span>
                   <span className="badge">{locale === 'ar' ? 'الإسكندرية' : 'Alexandria'}</span>
-                  <span className="badge">{locale === 'ar' ? 'جلدية طبية + تجميل' : 'Medical + Aesthetic'}</span>
+                  <span className="badge">{locale === 'ar' ? 'جلدية علاجية + تجميل' : 'Medical + Aesthetic'}</span>
                 </div>
               </div>
 
@@ -179,26 +247,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </Link>
           </div>
 
-          <div className="grid grid3" style={{ marginTop: '.9rem' }}>
-            <FadeIn>
-              <div className="card">
-                <div style={{ fontWeight: 900 }}>{t.servicesHome.titleMedical}</div>
-                <p>{t.servicesHome.descMedical}</p>
-              </div>
-            </FadeIn>
-            <FadeIn delay={0.05}>
-              <div className="card">
-                <div style={{ fontWeight: 900 }}>{t.servicesHome.titleAesthetic}</div>
-                <p>{t.servicesHome.descAesthetic}</p>
-              </div>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <div className="card">
-                <div style={{ fontWeight: 900 }}>{t.servicesHome.titleProcedures}</div>
-                <p>{t.servicesHome.descProcedures}</p>
-              </div>
-            </FadeIn>
-          </div>
+          <FadeIn>
+            <ServicesGrid locale={locale} />
+          </FadeIn>
 
           <div className="card" style={{ marginTop: '1rem' }}>
             <div style={{ fontWeight: 900 }}>
@@ -216,6 +267,38 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 >
                   {page.condition[locale]}
                 </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="roadmapShell" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="roadmapIntro">
+              <div className="badge">{locale === 'ar' ? 'خطة علاج مزمنة' : 'Chronic Care Roadmap'}</div>
+              <h2 className="sectionTitle" style={{ marginBottom: '.45rem' }}>
+                {locale === 'ar' ? 'رحلة منظمة من التقييم إلى التحسن' : 'A structured path from assessment to control'}
+              </h2>
+              <p className="muted" style={{ maxWidth: '65ch' }}>
+                {locale === 'ar'
+                  ? 'للحالات المزمنة مثل الصدفية وحب الشباب والالتهاب المتكرر، المتابعة تكون على مراحل واضحة وليست زيارة عابرة.'
+                  : 'For chronic conditions such as psoriasis, acne, and recurrent inflammation, progress happens through clear stages rather than a single visit.'}
+              </p>
+            </div>
+
+            <div className="roadmapTimeline">
+              {roadmapSteps.map((step, index) => (
+                <div key={step.title} className="roadmapStep">
+                  <div className="roadmapMarker">
+                    <span>{index + 1}</span>
+                  </div>
+                  <div className="roadmapContent">
+                    <div className="roadmapTitle">{step.title}</div>
+                    <div className="roadmapBody">{step.body}</div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -252,6 +335,39 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
+      {/* Photo gallery for image SEO */}
+      <section className="section" aria-labelledby="clinic-photo-gallery">
+        <div className="container">
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem' }}>
+            <h2 id="clinic-photo-gallery" className="sectionTitle" style={{ margin: 0 }}>
+              {locale === 'ar' ? 'صور العيادة' : 'Clinic Photos'}
+            </h2>
+            <Link className="link" href={`${base}/about`}>
+              {locale === 'ar' ? 'المزيد عن العيادة' : 'More about the clinic'}
+            </Link>
+          </div>
+
+          <div className="grid grid3" style={{ marginTop: '.9rem' }}>
+            {photoGallery.map((item, i) => (
+              <FadeIn key={item.src} delay={i * 0.05}>
+                <figure className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={item.src.includes('logo') ? 1024 : item.src.includes('doctor') ? 900 : 1600}
+                    height={item.src.includes('logo') ? 1024 : item.src.includes('doctor') ? 900 : 1194}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
+                  <figcaption style={{ padding: '.8rem 1rem', color: 'var(--muted)' }}>{item.caption}</figcaption>
+                </figure>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* About */}
       <section className="section">
         <div className="container">
@@ -262,7 +378,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <p>{t.about.body}</p>
                 <p>
                   {locale === 'ar'
-                    ? 'تقع العيادة على طريق الجيش بالإسكندرية، مع تركيز على الجلدية الطبية وطب التجميل الطبي بخطط علاج واضحة ومتابعة طويلة المدى.'
+                    ? 'تقع العيادة على طريق الجيش بالإسكندرية، مع تركيز على الجلدية العلاجية وطب التجميل الطبي بخطط علاج واضحة ومتابعة طويلة المدى.'
                     : 'The clinic is based on El Geish Road in Alexandria, with a focus on medical dermatology and aesthetic medicine through clear plans and long-term follow-up.'}
                 </p>
                 <Link className="btn" href={`${base}/about`} style={{ marginTop: '.6rem' }}>
@@ -396,7 +512,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <p>{address}</p>
               <p style={{ color: 'var(--muted)' }}>
                 {locale === 'ar'
-                  ? 'موقع مناسب لزيارات الجلدية الطبية، المتابعة، والإجراءات الجلدية البسيطة في الإسكندرية.'
+                  ? 'موقع مناسب لزيارات الجلدية العلاجية، المتابعة، والإجراءات الجلدية البسيطة في الإسكندرية.'
                   : 'Conveniently located for medical dermatology visits, follow-up, and minor skin procedures in Alexandria.'}
               </p>
               <p style={{ marginTop: '.6rem' }}>
@@ -422,14 +538,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </div>
 
             <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-              <iframe
+              <DeferredMapEmbed
                 title="Google Map"
                 src={mapEmbedSrc}
-                width="100%"
-                height="360"
-                loading="lazy"
-                style={{ border: 0, display: 'block' }}
-                referrerPolicy="no-referrer-when-downgrade"
+                loadLabel={locale === 'ar' ? 'عرض الخريطة' : 'Load map'}
+                height={360}
                 allowFullScreen
               />
             </div>

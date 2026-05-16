@@ -30,7 +30,7 @@ const services = {
       'التصبغات (الكلف وآثار الالتهاب)',
       'البهاق (تقييم وخيارات العلاج)',
       'الشرى (الحساسية)',
-      'فحص الجلد والدرموسكوب'
+      'فحص الجلد بالدرموسكوب'
     ]
   },
   procedures: {
@@ -39,7 +39,7 @@ const services = {
   },
   aesthetic: {
     en: ['Botox (as indicated)', 'Fillers (natural enhancement)', 'Chemical peels', 'Scar & texture plans', 'Skin rejuvenation protocols'],
-    ar: ['بوتوكس (عند الحاجة)', 'فيلر بنتائج طبيعية', 'تقشير كيميائي', 'خطط الندبات وملمس الجلد', 'بروتوكولات نضارة البشرة']
+    ar: ['بوتوكس (عند الحاجة)', 'فيلر بنتائج طبيعية', 'تقشير كيميائي', 'خطط علاج الندبات وملمس الجلد', 'بروتوكولات نضارة البشرة']
   }
 }
 
@@ -57,7 +57,7 @@ export async function generateMetadata({
     title: locale === 'ar' ? 'الخدمات الجلدية والتجميلية' : 'Dermatology Services',
     description:
       locale === 'ar'
-        ? 'خدمات الجلدية الطبية، أخذ عينة من الجلد وتحليل باثولوجي والإجراءات الجلدية، وطب التجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية.'
+        ? 'خدمات الجلدية العلاجية، أخذ عينة من الجلد وتحليل باثولوجي والإجراءات الجلدية، وطب التجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية.'
         : 'Medical dermatology, skin procedures, biopsies, and safety-first aesthetic services at Dr. Islam El-Helou’s clinic in Alexandria.'
   })
 }
@@ -75,7 +75,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
           <h1>{locale === 'ar' ? 'خدمات الجلدية وطب التجميل | عيادة د. إسلام الحلو - الإسكندرية' : 'Dermatology Services | Dr Islam El Helou Clinic Alexandria'}</h1>
           <p>
             {locale === 'ar'
-              ? 'مزيج بين الجلدية الطبية والتجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية. يتم اختيار الأنسب بعد التقييم والتشخيص.'
+              ? 'مزيج بين الجلدية العلاجية والتجميل الآمن في عيادة د. إسلام الحلو بالإسكندرية. يتم اختيار الأنسب بعد التقييم والتشخيص.'
               : 'A balanced mix of medical dermatology and safety-first aesthetics at Dr Islam El Helou Clinic Alexandria. The best option is chosen after evaluation and diagnosis.'}
           </p>
         </div>
@@ -86,7 +86,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
 
         <div className="grid" style={{ marginTop: '1.2rem' }}>
           <div className="card">
-            <div style={{ fontWeight: 900, fontSize: '1.1rem' }}>{locale === 'ar' ? 'جلدية طبية' : 'Medical Dermatology'}</div>
+            <div style={{ fontWeight: 900, fontSize: '1.1rem' }}>{locale === 'ar' ? 'جلدية علاجية' : 'Medical Dermatology'}</div>
             <ul style={{ margin: '.7rem 0 0', color: 'var(--muted)' }}>
               {services.medical[L].map((s) => (
                 <li key={s}>{s}</li>

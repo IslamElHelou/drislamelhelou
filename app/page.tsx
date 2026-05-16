@@ -1,6 +1,14 @@
 import { cookies, headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+import type { Metadata } from 'next'
+import { permanentRedirect } from 'next/navigation'
 import { defaultLocale, isLocale, type Locale } from '@/lib/i18n'
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false
+  }
+}
 
 function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
   if (!acceptLanguage) return defaultLocale
@@ -23,10 +31,10 @@ export default async function Root() {
   const cookieLocale = cookieStore.get('lang')?.value
 
   if (cookieLocale && isLocale(cookieLocale)) {
-    redirect(`/${cookieLocale}`)
+    permanentRedirect(`/${cookieLocale}`)
   }
 
   const headerStore = await headers()
   const locale = detectLocaleFromHeader(headerStore.get('accept-language'))
-  redirect(`/${locale}`)
+  permanentRedirect(`/${locale}`)
 }

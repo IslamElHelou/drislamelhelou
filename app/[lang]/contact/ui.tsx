@@ -7,6 +7,7 @@ import type { Dictionary } from '@/lib/dictionaries'
 import { clinic, getGoogleMapsDirectionsUrl, getMapEmbedSrc } from '@/lib/i18n'
 
 import { MotionFadeInUp } from '@/components/Motion'
+import DeferredMapEmbed from '@/components/DeferredMapEmbed'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
@@ -95,7 +96,7 @@ export default function ContactClient({
               </div>
               <div className="muted" style={{ marginTop: 6 }}>
                 {locale === 'ar'
-                  ? 'موقع العيادة مناسب لمراجعات الجلدية الطبية والتجميل والإجراءات الجلدية البسيطة.'
+                  ? 'موقع العيادة مناسب لمراجعات الجلدية العلاجية والتجميل والإجراءات الجلدية البسيطة.'
                   : 'The clinic location is convenient for dermatology consultations, aesthetic visits, and minor skin procedures.'}
               </div>
             </div>
@@ -121,14 +122,12 @@ export default function ContactClient({
                   {locale === 'ar' ? 'افتح الاتجاهات في خرائط Google' : 'Open directions in Google Maps'}
                 </a>
               </div>
-              <div className="mapWrap">
-                <iframe
-                  title="Google Map"
-                  src={mapEmbedSrc}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
+              <DeferredMapEmbed
+                title="Google Map"
+                src={mapEmbedSrc}
+                loadLabel={locale === 'ar' ? 'عرض الخريطة' : 'Load map'}
+                className="mapWrap"
+              />
             </div>
           </div>
         </div>
